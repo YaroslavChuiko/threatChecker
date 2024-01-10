@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CreatePost } from "~/app/_components/create-post";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
+import { SendUrl } from "./_components/send-url";
 
 export default async function Home() {
   const hello = await api.post.hello.query({ text: "from tRPC" });
@@ -56,7 +57,11 @@ export default async function Home() {
           </div>
         </div>
 
-        <CrudShowcase />
+        {/* <CrudShowcase /> */}
+
+        <h2 className="text-3xl font-bold">Send URL</h2>
+
+        <SendUrl />
       </div>
     </main>
   );
