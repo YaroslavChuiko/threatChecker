@@ -3,57 +3,57 @@ import * as cheerio from "cheerio";
 
 import {
   createTRPCRouter,
-  protectedProcedure,
   publicProcedure,
 } from "~/server/api/trpc";
 
 export const analyzeRouter = createTRPCRouter({
   scan: publicProcedure
-    .input(z.object({ url: z.string() }))
+    .input(z.object({ url: z.string().url({ message: "Invalid url" }) }))
     .mutation(async ({ ctx, input }) => {
+      const origin = new URL(input.url).origin;
       const data = await fetch(input.url);
       const text = await data.text();
-      // console.log("data", text);
-
       const $ = cheerio.load(text);
 
-      //  const $scripts = $('script')
-      const $scripts = $("script:not([src])");
-      const $scriptsWithSrc = $("script[src]");
+      const scriptTagCodeArray: string[] = $("script:not([src])")
+        .map((i, el) => {
+          // console.log("script", $(el).toString());
+          // // console.log(i, $(el).contents().toString());
+          // console.log(i, $(el).text());
+          // console.log("\n");
 
-      // console.log("url", input.url);
-      // console.log("scripts", $scripts.length);
-      // console.log("scriptsWithSrc", $scriptsWithSrc.length);
+          return $(el).contents().toString();
+        })
+        .toArray();
 
-      $scripts.each((i, el) => {
-        console.log("script", $(el).toString());
-        // console.log(i, $(el).contents().toString());
-        console.log(i, $(el).text());
-        console.log('\n')
+      const fileDownloadUrls: string[] = $("script[src]")
+        .map((i, el) => {
+          const url = $(el).attr("src")!;
+          return !url.startsWith("http") ? `${origin}${url}` : url;
+        })
+        .toArray()
+        .filter((url) => z.string().url().safeParse(url).success);
+
+      console.log("scriptSources", fileDownloadUrls);
+
+      const downloadedScripts = await Promise.allSettled(
+        fileDownloadUrls.map(async (url) => {
+          const data = await fetch(url);
+          const text = await data.text();
+          return text;
+        }),
+      );
+
+      console.log("downloadedScripts", downloadedScripts.map((r) => r.status));
+
+      downloadedScripts.forEach((result) => {
+        if (result.status === "fulfilled") {          
+          scriptTagCodeArray.push(result.value);
+        }
       });
 
-      // console.log($scripts.contents().toString().length);
-      const scriptSources = $scriptsWithSrc.map((i, el) => {
-        // console.log("scriptsWithSrc", $(el).toString());
-        // console.log(i, $(el).attr('src'));
-        // console.log('\n')
+      console.log('scriptTagCodeArray.length', scriptTagCodeArray.length)
 
-        return $(el).attr('src');
-      }).toArray();
-      console.log("scriptSources", scriptSources);
-
-      const s1 = await fetch(scriptSources[0]!);
-      const t1 = await s1.text();
-      // console.log("-------------------");
-      // console.log("t1", t1);
-      // console.log("-------------------");
-      
-      // * for scr value without domain name we need to add domain name from site url
-      const s2 = await fetch(`https://cheerio.js.org${scriptSources[1]}`);
-      const t2 = await s2.text();
-      console.log("-------------------");
-      console.log("t2", t2);
-      console.log("-------------------");
       return {
         greeting: `Hello ${input.url}`,
       };
