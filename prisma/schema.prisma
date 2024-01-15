@@ -15,9 +15,9 @@ generator client {
 // }
 
 datasource db {
-  provider = "postgresql"
-  url = env("DATABASE_URL") // uses connection pooling
-//   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+    provider = "postgresql"
+    url      = env("DATABASE_URL") // uses connection pooling
+    //   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
 }
 
 model Post {
@@ -76,4 +76,15 @@ model VerificationToken {
     expires    DateTime
 
     @@unique([identifier, token])
+}
+
+// threat signature
+// Malware Signature
+model MalwareSignature {
+    id          String @id @default(cuid())
+    name        String @db.VarChar(255)
+    description String @db.VarChar(255) //potential threats
+    regExp      String @db.VarChar(255)
+    //severity
+    weight      Int    @default(1) //weight of the threat
 }
