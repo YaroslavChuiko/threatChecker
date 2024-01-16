@@ -1,100 +1,99 @@
-import { type MalwareSignature, PrismaClient } from "@prisma/client";
+import { PrismaClient, type ThreatSignature } from "@prisma/client";
 
-
-const malwareSignatures: Omit<MalwareSignature, "id">[] = [
+const threatSignatures: Omit<ThreatSignature, "id">[] = [
   {
     name: "indexOf", // String.prototype.indexOf()
-    regExp: "/.indexOf(.*)/g",
+    pattern: "\\.indexOf\\(.*\\)", // double \ for correct seeding
     description: "test",
     weight: 1,
   },
   {
     name: "charAt", // String.prototype.charAt()
-    regExp: "/.charAt(.*)/g",
+    pattern: "\\.charAt\\(.*\\)",
     description: "test",
     weight: 1,
   },
   {
     name: "split", // String.prototype.split()
-    regExp: "/.split(.*)/g",
+    pattern: "\\.split\\(.*\\)",
     description: "test",
     weight: 1,
   },
   {
     name: "String.fromCharCode", // String.fromCharCode()
-    regExp: "/String.fromCharCode(.*)/g",
+    pattern: "String\\.fromCharCode\\(.*\\)",
     description: "test",
     weight: 1,
   },
   {
     name: "String.charCodeAt", // String.charCodeAt()
-    regExp: "/String.charCodeAt(.*)/g",
+    pattern: "String\\.charCodeAt\\(.*\\)",
     description: "test",
     weight: 1,
   },
   {
     name: "eval", // eval()
-    regExp: "/eval(.*)/g",
+    pattern: "eval\\(.*\\)",
     description: "test",
     weight: 5,
   },
   {
     name: "setTimeout", // setTimeout()
-    regExp: "/setTimeout(.*)/g",
+    pattern: "setTimeout\\(.*\\)",
     description: "test",
     weight: 2,
   },
   {
     name: "setInterval", // setInterval()
-    regExp: "/setInterval(.*)/g",
+    pattern: "setInterval\\(.*\\)",
     description: "test",
     weight: 2,
   },
   {
     name: "document.write", // document.write()
-    regExp: "/document.write(.*)/g",
+    pattern: "document\\.write\\(.*\\)",
     description: "test",
     weight: 4,
   },
   {
     name: "document.writeln", // document.writeln()
-    regExp: "/document.writeln(.*)/g",
+    pattern: "document\\.writeln\\(.*\\)",
     description: "test",
     weight: 4,
   },
   {
     name: "appendChild", // element.appendChild()
-    regExp: "/.appendChild(.*)/g",
+    pattern: "\\.appendChild\\(.*\\)",
     description: "test",
     weight: 2,
   },
   {
     name: "innerHTML", // element.innerHTML
-    regExp: "/.innerHTMLs*=/g",
+    pattern: "\\.innerHTML\\s*=",
     description: "test",
     weight: 4,
   },
   {
     name: "location.assign", // location.assign()
-    regExp: "/location.assign(.*)/g",
+    pattern: "location\\.assign\\(.*\\)",
     description: "test",
     weight: 4,
   },
   {
     name: "location.replace", // location.replace()
-    regExp: "/location.replace(.*)/g",
+    pattern: "location\\.replace\\(.*\\)",
     description: "test",
     weight: 4,
   },
   {
     name: "unescape", // unescape()
-    regExp: "/unescape(.*)/g",
+    pattern: "unescape\\(.*\\)",
     description: "test",
     weight: 5,
   },
   {
     name: "XMLHttpRequest", // XMLHttpRequest
-    regExp: "/XMLHttpRequest(/g",
+    pattern: "XMLHttpRequest\\(.*\\)",
     description: "test",
     weight: 3,
   },
@@ -104,14 +103,14 @@ const prisma = new PrismaClient();
 
 async function main() {
   await Promise.all(
-    malwareSignatures.map(async (malwareSignature) => {
+    threatSignatures.map(async (threatSignature) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-      await prisma.malwareSignature.create({
-        data: malwareSignature,
+      await prisma.threatSignature.create({
+        data: threatSignature,
       });
     }),
   );
-  console.log({ malwareSignatures });
+  console.log({ threatSignatures });
 }
 
 main()
