@@ -80,11 +80,11 @@ model VerificationToken {
 
 // threat signature
 // Malware Signature
-model MalwareSignature {
+model ThreatSignature {
     id          String @id @default(cuid())
     name        String @db.VarChar(255)
     description String @db.VarChar(255) //potential threats
-    regExp      String @db.VarChar(255)
+    pattern     String @db.VarChar(255)
     //severity
     weight      Int    @default(1) //weight of the threat
 }
