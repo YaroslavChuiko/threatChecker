@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, type FormEvent } from "react";
 
 import { api } from "~/trpc/react";
 
@@ -16,24 +16,27 @@ export function SendUrl() {
     },
   });
 
+  const handleChange = (e: FormEvent<HTMLInputElement>) => {
+    setUrl(e.currentTarget.value);
+  };
+
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    sendUrl.mutate({ url });
+  };
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        sendUrl.mutate({ url });
-      }}
-      className="flex flex-col gap-2"
-    >
+    <form onSubmit={handleSubmit} className="flex w-full">
       <input
         type="text"
-        placeholder="URL"
+        placeholder="https://example.com"
         value={url}
-        onChange={(e) => setUrl(e.target.value)}
-        className="w-full rounded-full px-4 py-2 text-black"
+        onChange={handleChange}
+        className="w-full px-4 py-2 text-black"
       />
       <button
         type="submit"
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
+        className="bg-white/10 px-14 py-4 font-semibold transition hover:bg-white/20"
         disabled={sendUrl.isLoading}
       >
         {sendUrl.isLoading ? "Submitting..." : "Submit"}
