@@ -1,12 +1,13 @@
 import "~/styles/globals.css";
 
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono, DM_Sans } from "next/font/google";
 import { cookies } from "next/headers";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
-const inter = Inter({
+const dmSans = DM_Sans({
   subsets: ["latin"],
+  weight: ["400", "700"],
   variable: "--font-sans",
 });
 
@@ -29,7 +30,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`font-mono ${inter.variable} ${jetBrainsMono.variable}`}>
+      <body
+        className={`bg-[#060522] font-mono ${dmSans.variable} ${jetBrainsMono.variable}`}
+      >
         <TRPCReactProvider cookies={cookies().toString()}>
           {children}
         </TRPCReactProvider>

@@ -7,7 +7,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
-        mono: ["var(--font-jetBrains-mono)"],
+        mono: ["var(--font-jetBrains-mono)", ...fontFamily.mono],
       },
       backgroundImage: {
         "gradient-scanlines":
