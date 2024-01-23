@@ -1,9 +1,9 @@
 import Link from "next/link";
 
-import { CreatePost } from "~/app/_components/create-post";
+// import { CreatePost } from "~/app/_components/create-post";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-import { SendUrl } from "../../_components/send-url";
+import { SendUrl } from "../../../_components/send-url";
 import Intro from "./Intro";
 
 export default async function Home() {
@@ -11,9 +11,11 @@ export default async function Home() {
   const session = await getServerAuthSession();
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-
-      <Intro />
+    <main className="flex min-h-screen flex-col items-center justify-center text-white ">
+    {/* <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white "> */}
+      <div className="relative h-screen w-full bg-gradient-to-t from-[#060522] to-[#061434] to-30%">
+        <Intro />
+      </div>
 
       <div className="container flex flex-col items-center justify-center gap-12 px-4 py-16 ">
         <div className="flex flex-col items-center gap-2">
@@ -44,21 +46,21 @@ export default async function Home() {
   );
 }
 
-async function CrudShowcase() {
-  const session = await getServerAuthSession();
-  if (!session?.user) return null;
+// async function CrudShowcase() {
+//   const session = await getServerAuthSession();
+//   if (!session?.user) return null;
 
-  const latestPost = await api.post.getLatest.query();
+//   const latestPost = await api.post.getLatest.query();
 
-  return (
-    <div className="w-full max-w-xs">
-      {latestPost ? (
-        <p className="truncate">Your most recent post: {latestPost.name}</p>
-      ) : (
-        <p>You have no posts yet.</p>
-      )}
+//   return (
+//     <div className="w-full max-w-xs">
+//       {latestPost ? (
+//         <p className="truncate">Your most recent post: {latestPost.name}</p>
+//       ) : (
+//         <p>You have no posts yet.</p>
+//       )}
 
-      <CreatePost />
-    </div>
-  );
-}
+//       <CreatePost />
+//     </div>
+//   );
+// }

@@ -32,11 +32,11 @@ export function SendUrl() {
         placeholder="https://example.com"
         value={url}
         onChange={handleChange}
-        className="w-full px-4 py-2 text-black"
+        className="w-full px-4 py-2 text-black font-sans font-bold rounded-l-xl bg-indigo-100"
       />
       <button
         type="submit"
-        className="bg-white/10 px-14 py-4 font-semibold transition hover:bg-white/20"
+        className="px-14 py-4 font-bold font-sans transition hover:bg-indigo-800 rounded-r-xl bg-indigo-800/60 text-indigo-50 backdrop-blur-sm"
         disabled={sendUrl.isLoading}
       >
         {sendUrl.isLoading ? "Submitting..." : "Submit"}
