@@ -18,7 +18,7 @@ const Header = () => {
         <span className="pl-2 font-mono leading-none text-lg">ThreatMinder</span>
       </Link>
       <nav className="absolute right-1/2 translate-x-1/2">
-        <ul className="flex items-center gap-6 font-sans font-bold">
+        <ul className="flex items-center gap-6 font-sans font-bold text-sm">
           {links.map(({ href, label }) => (
             <li
               key={href}
@@ -29,7 +29,10 @@ const Header = () => {
           ))}
         </ul>
       </nav>
-      <button className="rounded-full bg-yellow-900/20 px-5 py-2 font-sans font-bold text-yellow-50 backdrop-blur-sm transition hover:bg-yellow-900 hover:bg-opacity-100">
+      {/* <button className="rounded-full bg-yellow-900/20 px-5 py-2 font-sans font-bold text-yellow-50 backdrop-blur-sm transition hover:bg-yellow-900 hover:bg-opacity-100">
+        Sign In
+      </button> */}
+      <button className="px-6 py-2 font-bold text-sm font-sans transition hover:bg-indigo-800 border border-slate-400  bg-indigo-900/30 text-indigo-50">
         Sign In
       </button>
     </header>

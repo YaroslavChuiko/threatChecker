@@ -26,17 +26,17 @@ export function SendUrl() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full">
+    <form onSubmit={handleSubmit} className="flex w-full gap-4">
       <input
         type="text"
         placeholder="https://example.com"
         value={url}
         onChange={handleChange}
-        className="w-full px-4 py-2 text-black font-sans font-bold rounded-l-xl bg-indigo-100"
+        className="w-full px-4 py-2 text-white font-sans font-bold border border-slate-400 bg-slate-900"
       />
       <button
         type="submit"
-        className="px-14 py-4 font-bold font-sans transition hover:bg-indigo-800 rounded-r-xl bg-indigo-800/60 text-indigo-50 backdrop-blur-sm"
+        className="px-14 py-4 font-bold font-sans transition hover:bg-indigo-800 border border-slate-400  bg-indigo-900 text-indigo-50"
         disabled={sendUrl.isLoading}
       >
         {sendUrl.isLoading ? "Submitting..." : "Submit"}

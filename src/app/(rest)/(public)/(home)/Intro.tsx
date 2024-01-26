@@ -22,7 +22,7 @@ const Intro = () => {
     <div className="relative h-screen w-full bg-gradient-to-t from-[#060522] to-[#061434] to-30%">
       <div className="absolute inset-x-12 bottom-12 top-[72px]">
         <div className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-3xl border-2 border-[#061434] bg-[#061434] shadow-lg shadow-[rgba(8,11,22,.2)] ">
-          <div className="z-10 mx-20 flex max-w-7xl flex-col items-center rounded-2xl bg-slate-600/50 p-12  text-center shadow-xl shadow-[rgba(8,11,22,.2)]  backdrop-blur-[6px]">
+          <div className="z-10 mx-20 flex max-w-7xl flex-col items-center border-2 border-slate-600 rounded-sm bg-[#061434] p-12  text-center shadow-xl shadow-[rgba(8,11,22,.2)]  backdrop-blur-[6px]">
             {/* bg-slate-700/50 */}
             <h2 className="mb-8 text-3xl leading-none">
               Free website malware and security checker
