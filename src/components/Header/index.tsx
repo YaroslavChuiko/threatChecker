@@ -23,6 +23,7 @@ const Header = () => {
             <li
               key={href}
               // className="rounded-full bg-white/10 px-5 py-2 font-sans font-bold transition hover:bg-white/20"
+              className="transition hover:text-indigo-400"
             >
               <Link href={href} className="p-2">{label}</Link>
             </li>
@@ -32,7 +33,7 @@ const Header = () => {
       {/* <button className="rounded-full bg-yellow-900/20 px-5 py-2 font-sans font-bold text-yellow-50 backdrop-blur-sm transition hover:bg-yellow-900 hover:bg-opacity-100">
         Sign In
       </button> */}
-      <button className="px-6 py-2 font-bold text-sm font-sans transition hover:bg-indigo-800 border border-slate-400  bg-indigo-900/30 text-indigo-50">
+      <button className="px-6 py-2 font-bold text-sm font-sans transition hover:bg-indigo-800 border border-dashed border-slate-400  bg-indigo-900/30 text-indigo-50">
         Sign In
       </button>
     </header>
