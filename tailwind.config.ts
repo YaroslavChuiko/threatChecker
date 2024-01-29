@@ -23,6 +23,10 @@ export default {
           from: { transform: "translate3d(0, 0, 0)" },
           to: { transform: "translate3d(0, -100%, 0)" },
         },
+        buttonLoading: {
+          from: { backgroundPosition: "-300px 0" },
+          to: { backgroundPosition: "300px 0" },
+        },
         textGlitch: {
           "0%": {
             textShadow:

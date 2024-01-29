@@ -1,5 +1,6 @@
 "use client";
 
+import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
@@ -11,7 +12,7 @@ export function SendUrl() {
 
   const sendUrl = api.analyze.scan.useMutation({
     onSuccess: () => {
-      router.refresh();
+      // router.refresh();
       setUrl("");
     },
   });
@@ -22,24 +23,34 @@ export function SendUrl() {
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    if (sendUrl.isLoading) {
+      return;
+    }
+
     sendUrl.mutate({ url });
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex w-full gap-4">
+    <form onSubmit={handleSubmit} className="grid grid-cols-[1fr_auto] w-full gap-5">
       <input
         type="text"
         placeholder="https://example.com"
         value={url}
         onChange={handleChange}
-        className="w-full px-4 py-2 text-white font-sans font-bold border border-slate-400 bg-slate-900"
+        className="w-full border border-slate-400 bg-slate-900 px-4 py-2 font-sans font-bold text-white"
       />
       <button
         type="submit"
-        className="px-14 py-4 font-bold font-sans transition hover:bg-indigo-800 border border-slate-400  bg-indigo-900 text-indigo-50"
+        className={clsx(
+          "border border-slate-400 bg-indigo-900 h-[60px] min-w-[200px] flex items-center justify-center font-sans font-bold text-indigo-50  transition hover:bg-indigo-800",
+          {
+            "animate-[buttonLoading_1.3s_linear_infinite] bg-gradient-to-r from-indigo-900 from-10% via-indigo-700 via-20% to-indigo-900 to-60% bg-[length:600px_50px]":
+              sendUrl.isLoading,
+          },
+        )}
         disabled={sendUrl.isLoading}
       >
-        {sendUrl.isLoading ? "Submitting..." : "Submit"}
+        {sendUrl.isLoading ? "Scanning..." : "Scan Website"}
       </button>
     </form>
   );
