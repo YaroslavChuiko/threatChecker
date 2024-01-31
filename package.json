@@ -26,6 +26,7 @@
     "@trpc/server": "^10.43.6",
     "cheerio": "1.0.0-rc.12",
     "clsx": "^2.1.0",
+    "framer-motion": "^11.0.3",
     "next": "^14.0.4",
     "next-auth": "^4.24.5",
     "react": "18.2.0",

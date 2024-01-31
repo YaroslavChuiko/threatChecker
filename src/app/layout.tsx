@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`bg-[#060522] font-mono ${dmSans.variable} ${jetBrainsMono.variable}`}
+        className={`bg-[#060522] font-mono ${dmSans.variable} ${jetBrainsMono.variable} overflow-x-hidden`}
       >
         <TRPCReactProvider cookies={cookies().toString()}>
           {children}
