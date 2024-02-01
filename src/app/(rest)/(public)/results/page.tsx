@@ -21,12 +21,12 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
   // const session = await getServerAuthSession();
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center text-white">
+    <section className="flex min-h-screen flex-col items-center justify-center text-white">
       {data?.vulnerabilityCoef ? (
         <p className="text-2xl text-white">{data.vulnerabilityCoef}</p>
       ) : (
         <p>Loading...</p>
       )}
-    </main>
+    </section>
   );
 }

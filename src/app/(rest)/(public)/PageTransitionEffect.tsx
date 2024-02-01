@@ -25,9 +25,9 @@ function FrozenRouter({ children }: FrozenRouterProps) {
 }
 
 const variants = {
-  hidden: { opacity: 0, x: -200, y: 0 },
+  hidden: { opacity: 0, x: 0, y: 100 }, // 200
   enter: { opacity: 1, x: 0, y: 0 },
-  exit: { opacity: 0, x: 200, y: 0 },
+  exit: { opacity: 0, x: 0, y: 100 },
 };
 
 type Props = {
@@ -49,7 +49,7 @@ export default function PageTransitionEffect({ children }: Props) {
         animate="enter"
         exit="exit"
         transition={{
-          type: "linear",
+          type: "easeIn",
           duration: 0.5,
         }}
         // initial={{ x: 300, opacity: 0 }}
