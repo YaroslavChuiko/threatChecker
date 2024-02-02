@@ -1,9 +1,9 @@
 import Link from "next/link";
 
 // import { CreatePost } from "~/app/_components/create-post";
+import { ScanURLForm } from "~/components/forms/ScanURLForm";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-import { SendUrl } from "../../../_components/send-url";
 import Intro from "./Intro";
 
 export default async function Home() {
@@ -37,7 +37,7 @@ export default async function Home() {
 
         <h2 className="text-3xl font-bold">Send URL</h2>
 
-        <SendUrl />
+        <ScanURLForm />
       </div>
     </section>
   );

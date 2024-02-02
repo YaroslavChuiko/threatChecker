@@ -1,9 +1,9 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { SendUrl } from "~/app/_components/send-url";
 import { generateRows } from "~/utils/generateTextRows";
 import useAnimationVariants from "./useAnimationVariants";
+import { ScanURLForm } from "~/components/forms/ScanURLForm";
 
 const rows = generateRows(100, 300);
 
@@ -58,7 +58,7 @@ const Intro = () => {
               check the website for known malware, viruses, blacklisting status,
               website errors, out-of-date software, and malicious code.
             </p>
-            <SendUrl />
+            <ScanURLForm />
             <p className="mt-8 text-sm italic text-slate-400">
               <strong>Disclaimer:</strong> ThreatChecker is a free website
               security scanner. Remote scanners have limited access and results
