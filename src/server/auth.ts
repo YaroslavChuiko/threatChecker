@@ -5,8 +5,8 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
-
 import { env } from "~/env";
+import { ROUTES } from "~/routes";
 import { db } from "~/server/db";
 
 /**
@@ -44,6 +44,9 @@ export const authOptions: NextAuthOptions = {
         id: user.id,
       },
     }),
+  },
+  pages: {
+    signIn: ROUTES.AUTH.SIGNIN,
   },
   adapter: PrismaAdapter(db),
   providers: [

@@ -9,5 +9,6 @@ export const ROUTES = {
   },
 
   AUTH: {
+    SIGNIN: '/auth/signin',
   },
 };
