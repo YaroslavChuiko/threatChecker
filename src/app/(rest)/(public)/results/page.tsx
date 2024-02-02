@@ -13,20 +13,21 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
     notFound();
   }
 
-  const data = await api.analyze.scan.mutate({ url: query });
+  // const data = await api.analyze.scan.mutate({ url: query });
 
-  // await new Promise((resolve) => {
-  //   setTimeout(resolve, 5000);
-  // });
+  await new Promise((resolve) => {
+    setTimeout(resolve, 5000);
+  });
   // const session = await getServerAuthSession();
 
   return (
     <section className="flex min-h-screen flex-col items-center justify-center text-white">
-      {data?.vulnerabilityCoef ? (
+      {/* {data?.vulnerabilityCoef ? (
         <p className="text-2xl text-white">{data.vulnerabilityCoef}</p>
       ) : (
         <p>Loading...</p>
-      )}
+      )} */}
+      dsfsd fsd fsd fsdf dsf sd
     </section>
   );
 }
