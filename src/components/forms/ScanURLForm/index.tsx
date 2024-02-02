@@ -25,7 +25,7 @@ const ScanUrlSchema = z.object({
 
 type ScanUrlForm = z.infer<typeof ScanUrlSchema>;
 
-export function SendUrl() {
+export function ScanURLForm() {
   const router = useRouter();
   const [isScanning, setIsScanning] = useState(false);
 
