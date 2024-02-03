@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { ROUTES } from "~/routes";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { getServerAuthSession } from "~/server/auth";
-import EyeIcon from "../icons/EyeIcon";
+import Logo from "../Logo";
 
 const links = [
   { href: ROUTES.PUBLIC.HOME, label: "Home" },
@@ -30,17 +30,12 @@ const Header = ({ session }: Props) => {
 
   return (
     <header className="absolute inset-x-0 top-0 z-40 flex items-center justify-between px-14 pb-4 pt-4 text-white">
-      <Link className="flex items-center" href={ROUTES.PUBLIC.HOME}>
-        <EyeIcon className="h-8 w-8" />
-        <span className="pl-2 font-mono text-lg leading-none">
-          ThreatMinder
-        </span>
-      </Link>
+      <Logo />
       <nav className="absolute right-1/2 translate-x-1/2">
-        <ul className="flex items-center gap-6 font-sans text-sm font-bold">
+        <ul className="flex items-center gap-8 text-sm ">
           {links.map(({ href, label }) => (
-            <li key={href} className="transition hover:text-indigo-400">
-              <Link href={href} className="p-2">
+            <li key={href} className="">
+              <Link href={href} className="transition hover:text-indigo-400 border-transparent border-b hover:border-indigo-400">
                 {label}
               </Link>
             </li>
