@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`bg-[#060522] font-mono ${dmSans.variable} ${jetBrainsMono.variable} overflow-x-hidden  bg-gradient-to-b from-[#061434] to-[#060522] to-[70svh]`}
+        className={`bg-[#060522] font-mono ${dmSans.variable} ${jetBrainsMono.variable} overflow-x-hidden  bg-gradient-to-b from-[#061434] to-[#060522] to-[70svh] text-white`}
       >
         <TRPCReactProvider cookies={cookies().toString()}>
           {children}

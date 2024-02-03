@@ -10,5 +10,6 @@ export const ROUTES = {
 
   AUTH: {
     SIGNIN: '/auth/signin',
+    SIGNIN_EMAIL: '/auth/signin/email',
   },
 };
