@@ -7,6 +7,7 @@ import { ROUTES } from "~/routes";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { getServerAuthSession } from "~/server/auth";
 import Logo from "../Logo";
+import { useEffect } from "react";
 
 const links = [
   { href: ROUTES.PUBLIC.HOME, label: "Home" },
@@ -19,6 +20,10 @@ type Props = {
 
 const Header = ({ session }: Props) => {
   const router = useRouter();
+
+  useEffect(() => {
+    router.prefetch(ROUTES.AUTH.SIGNIN)
+  })
 
   const handleSignOut = () => {
     void signOut();
