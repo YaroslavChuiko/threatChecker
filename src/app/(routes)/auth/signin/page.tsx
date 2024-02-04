@@ -1,5 +1,6 @@
 "use client";
 
+import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { type MouseEventHandler, useEffect } from "react";
@@ -22,7 +23,10 @@ export default function SignInPage() {
     <div>
       <div className="mb-[50px] mt-[50px] text-lg">Sign in</div>
       <div className="mb-10 flex flex-col gap-3 text-start">
-        <button className="flex h-[44px] w-full items-center justify-center border border-slate-400 bg-indigo-900/30 px-6 py-2 font-sans text-sm font-bold text-indigo-50  transition hover:bg-indigo-800">
+        <button
+          className="flex h-[44px] w-full items-center justify-center border border-slate-400 bg-indigo-900/30 px-6 py-2 font-sans text-sm font-bold text-indigo-50  transition hover:bg-indigo-800"
+          onClick={() => signIn("google", { callbackUrl: ROUTES.PUBLIC.HOME })}
+        >
           <FaGoogle className="mr-3" size="16px" />
           Sign in with Google
         </button>

@@ -1,8 +1,11 @@
+"use client"
 import Logo from "~/components/Logo";
 import { generateRows } from "~/utils/generateTextRows";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const rows = generateRows(100, 300);
+  // const { data: session, status} = useSession();
+
 
   const textGroup = (
     <div className="animate-[verticalTicker_60s_linear_infinite]">
