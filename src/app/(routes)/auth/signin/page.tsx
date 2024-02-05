@@ -1,11 +1,45 @@
 "use client";
 
+import { type BuiltInProviderType } from "next-auth/providers/index";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { type MouseEventHandler, useEffect } from "react";
-import { FaEnvelope, FaFacebook, FaGoogle } from "react-icons/fa6";
+import { useEffect, type MouseEventHandler, type ReactNode } from "react";
+import DiscordIcon from "~/components/icons/DiscordIcon";
+import EnvelopeIcon from "~/components/icons/EnvelopeIcon";
+import GithubIcon from "~/components/icons/GithubIcon";
+import GoogleIcon from "~/components/icons/GoogleIcon";
 import { ROUTES } from "~/routes";
+
+type ProviderButton = {
+  id: BuiltInProviderType;
+  icon: ReactNode;
+  onClick: MouseEventHandler<HTMLButtonElement>;
+};
+
+const providerButtons: ProviderButton[] = [
+  {
+    id: "google",
+    icon: <GoogleIcon className="mr-3 h-4 w-4" />,
+    onClick: () => {
+      void signIn("google", { callbackUrl: ROUTES.PUBLIC.HOME });
+    },
+  },
+  {
+    id: "github",
+    icon: <GithubIcon className="mr-3 h-4 w-4" />,
+    onClick: () => {
+      void signIn("github", { callbackUrl: ROUTES.PUBLIC.HOME });
+    },
+  },
+  {
+    id: "discord",
+    icon: <DiscordIcon className="mr-3 h-4 w-4" />,
+    onClick: () => {
+      void signIn("discord", { callbackUrl: ROUTES.PUBLIC.HOME });
+    },
+  },
+];
 
 export default function SignInPage() {
   const router = useRouter();
@@ -14,40 +48,43 @@ export default function SignInPage() {
     router.prefetch(ROUTES.AUTH.SIGNIN_EMAIL);
   });
 
-  const handleClick: MouseEventHandler<HTMLButtonElement> = (e) => {
+  const handleSignInEmailClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     router.push(ROUTES.AUTH.SIGNIN_EMAIL);
   };
 
   return (
-    <div>
+    <>
       <div className="mb-[50px] mt-[50px] text-lg">Sign in</div>
       <div className="mb-10 flex flex-col gap-3 text-start">
+        {providerButtons.map((provider) => (
+          <button
+            key={provider.id}
+            className="flex h-[44px] w-full items-center justify-center border border-slate-400 bg-indigo-900/30 px-6 py-2 font-sans text-sm font-bold text-indigo-50  transition hover:bg-indigo-800"
+            onClick={provider.onClick}
+          >
+            {provider.icon}
+            Sign in with{" "}
+            {provider.id.charAt(0).toUpperCase() + provider.id.slice(1)}
+          </button>
+        ))}
         <button
           className="flex h-[44px] w-full items-center justify-center border border-slate-400 bg-indigo-900/30 px-6 py-2 font-sans text-sm font-bold text-indigo-50  transition hover:bg-indigo-800"
-          onClick={() => signIn("google", { callbackUrl: ROUTES.PUBLIC.HOME })}
+          onClick={handleSignInEmailClick}
         >
-          <FaGoogle className="mr-3" size="16px" />
-          Sign in with Google
-        </button>
-        <button className="flex h-[44px] w-full items-center justify-center border border-slate-400 bg-indigo-900/30 px-6 py-2 font-sans text-sm font-bold text-indigo-50  transition hover:bg-indigo-800">
-          <FaFacebook className="mr-3" size="16px" /> Sign in with Facebook
-        </button>
-        <button
-          className="flex h-[44px] w-full items-center justify-center border border-slate-400 bg-indigo-900/30 px-6 py-2 font-sans text-sm font-bold text-indigo-50  transition hover:bg-indigo-800"
-          onClick={handleClick}
-          // href={ROUTES.AUTH.SIGNIN_EMAIL}
-        >
-          <FaEnvelope className="mr-3" size="16px" /> Sign in with Email
+          <EnvelopeIcon className="mr-3 h-4 w-4" /> Sign in with Email
         </button>
       </div>
 
       <div className="text-sm text-slate-400">
         Don&apos;t have an account?{" "}
-        <Link href="#" className="text-indigo-400 hover:underline">
+        <Link
+          href={ROUTES.AUTH.SIGNUP}
+          className="text-indigo-400 hover:underline"
+        >
           Sign up
         </Link>
       </div>
-    </div>
+    </>
   );
 }
