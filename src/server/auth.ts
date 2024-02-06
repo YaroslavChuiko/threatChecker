@@ -5,9 +5,9 @@ import {
   type NextAuthOptions,
 } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
-import GoogleProvider, { type GoogleProfile } from "next-auth/providers/google";
-import GitHubProvider, { type GithubProfile } from "next-auth/providers/github";
 import EmailProvider from "next-auth/providers/email";
+import GitHubProvider from "next-auth/providers/github";
+import GoogleProvider from "next-auth/providers/google";
 import { env } from "~/env";
 import { ROUTES } from "~/routes";
 import { db } from "~/server/db";
@@ -62,29 +62,11 @@ export const authOptions: NextAuthOptions = {
       clientId: env.GOOGLE_CLIENT_ID,
       clientSecret: env.GOOGLE_CLIENT_SECRET,
       allowDangerousEmailAccountLinking: true,
-      profile(profile: GoogleProfile) {
-        return {
-          id: profile.sub,
-          name: profile.name,
-          email: profile.email,
-          image: profile.picture,
-          emailVerified: profile.email_verified,
-        };
-      },
     }),
     GitHubProvider({
       clientId: env.GITHUB_CLIENT_ID,
       clientSecret: env.GITHUB_CLIENT_SECRET,
       allowDangerousEmailAccountLinking: true,
-      profile(profile: GithubProfile) {
-        return {
-          id: profile.id.toString(),
-          name: profile.name ?? profile.login,
-          email: profile.email,
-          image: profile.avatar_url,
-          emailVerified: true
-        };
-      },
     }),
     EmailProvider({
       server: {
