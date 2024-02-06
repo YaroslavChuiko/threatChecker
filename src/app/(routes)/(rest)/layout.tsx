@@ -7,10 +7,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
 
   return (
     <>
-      {/* <div className=" bg-gradient-to-b from-[#061434] to-[#060522] to-[70svh]"> */}
       <Header session={session}/>
       <main>{children}</main>
-      {/* </div> */}
     </>
   );
 }
