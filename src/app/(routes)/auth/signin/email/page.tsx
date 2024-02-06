@@ -36,7 +36,7 @@ export default function SignInWithEmailPage() {
   });
 
   const onSubmit: SubmitHandler<EmailSignInForm> = async ({ email }) => {
-    await signIn("email", { email });
+    await signIn("email", { email, callbackUrl: ROUTES.PUBLIC.HOME, redirect: false });
   };
 
   return (
