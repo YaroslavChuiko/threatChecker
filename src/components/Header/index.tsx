@@ -8,6 +8,7 @@ import { ROUTES } from "~/routes";
 import { getServerAuthSession } from "~/server/auth";
 import Logo from "../Logo";
 import { useEffect } from "react";
+import { hideEmail } from "~/utils/hideEmail";
 
 const links = [
   { href: ROUTES.PUBLIC.HOME, label: "Home" },
@@ -22,8 +23,8 @@ const Header = ({ session }: Props) => {
   const router = useRouter();
 
   useEffect(() => {
-    router.prefetch(ROUTES.AUTH.SIGNIN)
-  })
+    router.prefetch(ROUTES.AUTH.SIGNIN);
+  });
 
   const handleSignOut = () => {
     void signOut();
@@ -40,19 +41,27 @@ const Header = ({ session }: Props) => {
         <ul className="flex items-center gap-8 text-sm ">
           {links.map(({ href, label }) => (
             <li key={href} className="">
-              <Link href={href} className="transition hover:text-indigo-400 border-transparent border-b hover:border-indigo-400">
+              <Link
+                href={href}
+                className="border-b border-transparent transition hover:border-indigo-400 hover:text-indigo-400"
+              >
                 {label}
               </Link>
             </li>
           ))}
         </ul>
       </nav>
-      <button
-        className="border border-dashed border-slate-400 bg-indigo-900/30 px-6 py-2 font-sans text-sm font-bold text-indigo-50  transition hover:bg-indigo-800"
-        onClick={session ? handleSignOut : handleSignIn}
-      >
-        {session ? "Sign out" : "Sign in"}
-      </button>
+      <div className="flex items-center gap-6">
+        {session?.user?.email ? (
+          <div className="text-xs">{hideEmail(session.user.email)}</div>
+        ) : null}
+        <button
+          className="border border-slate-400 bg-indigo-900/30 px-6 py-2 font-sans text-sm font-bold text-indigo-50  transition hover:bg-indigo-800"
+          onClick={session ? handleSignOut : handleSignIn}
+        >
+          {session ? "Sign out" : "Sign in"}
+        </button>
+      </div>
     </header>
   );
 };
