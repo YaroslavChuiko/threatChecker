@@ -2,13 +2,15 @@
 
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ROUTES } from "~/routes";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { getServerAuthSession } from "~/server/auth";
 import Logo from "../Logo";
 import { useEffect } from "react";
 import { hideEmail } from "~/utils/hideEmail";
+import clsx from "clsx";
+import path from "path";
 
 const links = [
   { href: ROUTES.PUBLIC.HOME, label: "Home" },
@@ -21,6 +23,7 @@ type Props = {
 
 const Header = ({ session }: Props) => {
   const router = useRouter();
+  const pathname = usePathname();
 
   useEffect(() => {
     router.prefetch(ROUTES.AUTH.SIGNIN);
@@ -35,15 +38,20 @@ const Header = ({ session }: Props) => {
   };
 
   return (
-    <header className="absolute inset-x-0 top-0 z-40 flex items-center justify-between px-14 pb-4 pt-4 text-white">
+    <header className="mx-4 flex items-center justify-between border-b border-[#ff3845] pb-5 pt-5 text-[#f75049]">
       <Logo />
-      <nav className="absolute right-1/2 translate-x-1/2">
-        <ul className="flex items-center gap-8 text-sm ">
+      <nav className="absolute right-1/2 translate-x-1/2 ">
+        <ul className="flex items-center gap-9">
           {links.map(({ href, label }) => (
             <li key={href} className="">
               <Link
                 href={href}
-                className="border-b border-transparent transition hover:border-indigo-400 hover:text-indigo-400"
+                className={clsx(
+                  "border-b border-transparent text-xl font-medium uppercase  text-[#f75049]/70  transition hover:text-[#f75049]",
+                  {
+                    "text-[#f75049]/100": pathname === href,
+                  },
+                )}
               >
                 {label}
               </Link>
@@ -53,10 +61,11 @@ const Header = ({ session }: Props) => {
       </nav>
       <div className="flex items-center gap-6">
         {session?.user?.email ? (
-          <div className="text-xs">{hideEmail(session.user.email)}</div>
+          <div className="text-sm">{hideEmail(session.user.email)}</div>
         ) : null}
+        {/* !! add angled corner to btn */}
         <button
-          className="border border-slate-400 bg-indigo-900/30 px-6 py-2 font-sans text-sm font-bold text-indigo-50  transition hover:bg-indigo-800"
+          className="border border-[#ff3845]/30 bg-[#0E0E17]/80 px-5 py-1 font-main text-sm font-normal uppercase text-[#ff3845]  transition hover:border-[#ff3845]/100 hover:bg-[#ff3845]/10 active:bg-[#ff3845]/70 active:text-[#0E0E17]"
           onClick={session ? handleSignOut : handleSignIn}
         >
           {session ? "Sign out" : "Sign in"}
