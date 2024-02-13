@@ -6,8 +6,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["var(--font-sans)", ...fontFamily.sans],
-        mono: ["var(--font-jetBrains-mono)", ...fontFamily.mono],
+        main: ["var(--font-main)", ...fontFamily.serif],
+        complementary: ["var(--font-complementary)", ...fontFamily.serif],
       },
       backgroundImage: {
         "gradient-scanlines":
