@@ -5,7 +5,7 @@ import { generateRows } from "~/utils/generateTextRows";
 import useAnimationVariants from "./useAnimationVariants";
 import { ScanURLForm } from "~/components/forms/ScanURLForm";
 
-const rows = generateRows(100, 300);
+const rows = generateRows(100, 500);
 
 const Intro = () => {
   const { formVariants, introVariants, tickerVariants } =
@@ -15,7 +15,7 @@ const Intro = () => {
     <div className="animate-[verticalTicker_60s_linear_infinite]">
       {rows.map((row, index) => (
         <div
-          className="animate-[textGlitch_1.6s_linear_infinite] whitespace-pre font-mono text-[12px] leading-tight text-[#7d9ddf]"
+          className="animate-[textGlitch_1.6s_linear_infinite] whitespace-pre font-main text-[12px] leading-tight text-[#7d9ddf]"
           // style={{ fontFamily: "Courier, monospace" }}
           key={index}
         >
