@@ -1,15 +1,18 @@
 import Logo from "~/components/Logo";
 import { generateRows } from "~/utils/generateTextRows";
 
-const rows = generateRows(100, 300);
+const rows = generateRows(100, 500);
 
-export default async function Layout({ children }: { children: React.ReactNode }) {
-
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const textGroup = (
     <div className="animate-[verticalTicker_60s_linear_infinite]">
       {rows.map((row, index) => (
         <div
-          className="animate-[textGlitch_1.6s_linear_infinite] whitespace-pre font-mono text-[12px] leading-tight text-[#7d9ddf]"
+          className="animate-[textGlitch_1.6s_linear_infinite] whitespace-pre font-complementary text-[12px] leading-tight text-[#ff3845]"
           // style={{ fontFamily: "Courier, monospace" }}
           key={index}
         >
@@ -30,8 +33,10 @@ export default async function Layout({ children }: { children: React.ReactNode }
       </div>
 
       <div className="flex w-[400px] items-start justify-center px-10 py-[80px]">
-        <div className="w-full flex-col pt-[60px] items-start justify-center text-center shadow-xl shadow-[rgba(8,11,22,.2)]">
-          <Logo />
+        <div className="w-full flex-col items-center justify-center pt-[60px] text-center">
+          <div>
+            <Logo className="h-8" />
+          </div>
           {children}
         </div>
       </div>

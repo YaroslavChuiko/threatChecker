@@ -57,13 +57,13 @@ export function ScanURLForm() {
         <input
           type="text"
           placeholder="https://www.example.com"
-          className="h-[60px] w-full flex-grow border border-slate-400 bg-slate-900 px-4 py-2 font-sans font-bold text-white"
+          className="h-[60px] w-full flex-grow border border-[#ff3845] bg-[#ff3845]/10 px-4 py-2 font-main font-bold text-[#ff3845] placeholder-[#ff3845]/70"
           {...register("url")}
         />
         <button
           type="submit"
           className={clsx(
-            "flex h-[60px] min-w-[200px] flex-shrink-0 items-center justify-center border border-slate-400 bg-indigo-900 font-sans font-bold text-indigo-50  transition hover:bg-indigo-800",
+            "flex h-[60px] min-w-[200px] flex-shrink-0 items-center justify-center bg-[#ff3845] font-main uppercase text-lg font-medium text-[#0E0E17]  transition hover:bg-[#ff3845]/70",
             {
               "animate-[buttonLoading_1.3s_linear_infinite] bg-gradient-to-r from-indigo-900 from-10% via-indigo-700 via-20% to-indigo-900 to-60% bg-[length:600px_50px]":
                 isScanning,
