@@ -10,7 +10,6 @@ import Logo from "../Logo";
 import { useEffect } from "react";
 import { hideEmail } from "~/utils/hideEmail";
 import clsx from "clsx";
-import path from "path";
 
 const links = [
   { href: ROUTES.PUBLIC.HOME, label: "Home" },
@@ -39,19 +38,20 @@ const Header = ({ session }: Props) => {
 
   return (
     <header className="mx-4 flex items-center justify-between border-b border-[#ff3845] pb-5 pt-5 text-[#f75049]">
-      <Logo />
+      <Logo className="h-8" />
       <nav className="absolute right-1/2 translate-x-1/2 ">
         <ul className="flex items-center gap-9">
           {links.map(({ href, label }) => (
             <li key={href} className="">
               <Link
                 href={href}
-                className={clsx(
-                  "border-b border-transparent text-xl font-medium uppercase  text-[#f75049]/70  transition hover:text-[#f75049]",
-                  {
-                    "text-[#f75049]/100": pathname === href,
-                  },
-                )}
+                className="border-b border-transparent text-xl font-medium uppercase  text-[#f75049]/80  transition hover:text-[#f75049]"
+                // className={clsx(
+                //   "border-b border-transparent text-xl font-medium uppercase  text-[#f75049]/70  transition hover:text-[#f75049]",
+                //   {
+                //     "text-[#f75049]/100": pathname === href,
+                //   },
+                // )}
               >
                 {label}
               </Link>
