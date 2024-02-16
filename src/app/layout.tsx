@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`bg-[#0E0E17] font-main ${rajdhani.variable} ${orbitron.variable} overflow-x-hidden  to-[70svh] text-[#f75049] min-h-screen`}
+        className={`bg-secondaryColor font-main ${rajdhani.variable} ${orbitron.variable} overflow-x-hidden relative pb-20 text-mainColor min-h-screen`}
       >
         <TRPCReactProvider cookies={cookies().toString()}>
           {children}

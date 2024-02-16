@@ -37,7 +37,7 @@ const Header = ({ session }: Props) => {
   };
 
   return (
-    <header className="mx-4 flex items-center justify-between border-b border-[#ff3845] pb-5 pt-5 text-[#f75049]">
+    <header className="mx-4 flex items-center justify-between border-b border-mainColor pb-5 pt-5 text-mainColor">
       <Logo className="h-8" />
       <nav className="absolute right-1/2 translate-x-1/2 ">
         <ul className="flex items-center gap-9">
@@ -45,7 +45,7 @@ const Header = ({ session }: Props) => {
             <li key={href} className="">
               <Link
                 href={href}
-                className="border-b border-transparent text-xl font-medium uppercase  text-[#f75049]/80  transition hover:text-[#f75049]"
+                className="border-b border-transparent text-xl font-medium uppercase  text-mainColor/80  transition hover:text-mainColor"
                 // className={clsx(
                 //   "border-b border-transparent text-xl font-medium uppercase  text-[#f75049]/70  transition hover:text-[#f75049]",
                 //   {
@@ -65,7 +65,7 @@ const Header = ({ session }: Props) => {
         ) : null}
         {/* !! add angled corner to btn */}
         <button
-          className="border border-[#ff3845]/30 bg-[#0E0E17]/80 px-5 py-1 font-main text-sm font-normal uppercase text-[#ff3845]  transition hover:border-[#ff3845]/100 hover:bg-[#ff3845]/10 active:bg-[#ff3845]/70 active:text-[#0E0E17]"
+          className="border border-mainColor/30 bg-secondaryColor/80 px-5 py-1 font-main text-sm font-normal uppercase text-mainColor  transition hover:border-mainColor/100 hover:bg-mainColor/10 active:bg-mainColor/70 active:text-secondaryColor"
           onClick={session ? handleSignOut : handleSignIn}
         >
           {session ? "Sign out" : "Sign in"}

@@ -55,12 +55,12 @@ export default function SignInPage() {
 
   return (
     <>
-      <div className="mb-[50px] mt-[50px] text-lg">Sign in</div>
-      <div className="mb-10 flex flex-col gap-3 text-start">
+      <div className="mb-[50px] mt-[50px] text-lg uppercase font-medium">Sign in</div>
+      <div className="mb-10 flex flex-col gap-2 text-start">
         {providerButtons.map((provider) => (
           <button
             key={provider.id}
-            className="flex h-[44px] w-full items-center justify-center border border-slate-400 bg-indigo-900/30 px-6 py-2 font-sans text-sm font-bold text-indigo-50  transition hover:bg-indigo-800"
+            className="flex h-[40px] w-full items-center justify-center border border-mainColor/30 bg-mainColor/10 px-6 py-2 font-medium  uppercase text-mainColor  transition hover:border-mainColor/100 hover:bg-mainColor hover:bg-mainColor/20 active:bg-mainColor/70 active:text-secondaryColor"
             onClick={provider.onClick}
           >
             {provider.icon}
@@ -69,18 +69,18 @@ export default function SignInPage() {
           </button>
         ))}
         <button
-          className="flex h-[44px] w-full items-center justify-center border border-slate-400 bg-indigo-900/30 px-6 py-2 font-sans text-sm font-bold text-indigo-50  transition hover:bg-indigo-800"
+          className="flex h-[40px] w-full items-center justify-center border border-mainColor/30 bg-mainColor/10 px-6 py-2 font-medium  uppercase text-mainColor  transition hover:border-mainColor/100 hover:bg-mainColor hover:bg-mainColor/20 active:bg-mainColor/70 active:text-secondaryColor"
           onClick={handleSignInEmailClick}
         >
           <EnvelopeIcon className="mr-3 h-4 w-4" /> Sign in with Email
         </button>
       </div>
 
-      <div className="text-sm text-slate-400">
+      <div className="text-sm text-mainColor/80 uppercase">
         Don&apos;t have an account?{" "}
         <Link
           href={ROUTES.AUTH.SIGNUP}
-          className="text-indigo-400 hover:underline"
+          className="text-mainColor hover:underline font-medium"
         >
           Sign up
         </Link>

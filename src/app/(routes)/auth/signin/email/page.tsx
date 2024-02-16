@@ -36,7 +36,11 @@ export default function SignInWithEmailPage() {
   });
 
   const onSubmit: SubmitHandler<EmailSignInForm> = async ({ email }) => {
-    await signIn("email", { email, callbackUrl: ROUTES.PUBLIC.HOME, redirect: false });
+    await signIn("email", {
+      email,
+      callbackUrl: ROUTES.PUBLIC.HOME,
+      redirect: false,
+    });
   };
 
   return (
@@ -45,26 +49,30 @@ export default function SignInWithEmailPage() {
         <SignInWithEmailResult email={getValues("email")} />
       ) : (
         <>
-          <h2 className="mb-[30px] mt-[50px] text-lg">Sign in with email</h2>
-          <div className="mb-[50px] text-sm text-slate-400">
+          <h2 className="mb-[30px] mt-[50px] text-lg font-medium uppercase">
+            Sign in with email
+          </h2>
+          <div className="text-mainColor/80 mb-[50px] text-sm">
             Enter the email address associated with your account, and we&apos;ll
             send a magic link to your inbox.
           </div>
 
           <form
             onSubmit={handleSubmit(onSubmit)}
-            className="mb-10 flex flex-col gap-5 text-start"
+            className="mb-10 flex flex-col gap-2 text-start"
           >
             <div className="flex flex-col gap-1 text-start">
-              <label htmlFor="email" className="text-sm text-slate-400">
-                Email
+              <label
+                htmlFor="email"
+                className="text-mainColor ml-2 font-medium uppercase"
+              >
+                ENTER Email:
               </label>
               <input
                 aria-label="email"
                 id="email"
                 type="text"
-                placeholder="Your email address"
-                className="h-[44px] w-full border border-slate-400 bg-slate-900 px-4 py-2 font-sans text-sm text-white"
+                className="border-mainColor bg-mainColor/10 text-mainColor placeholder-mainColor/70 h-[40px] w-full flex-grow border px-2 py-2 font-main font-medium "
                 {...register("email")}
               />
               {errors?.email && (
@@ -75,7 +83,7 @@ export default function SignInWithEmailPage() {
             </div>
             <button
               className={clsx(
-                "flex h-[44px] w-full items-center justify-center border border-slate-400 bg-indigo-900/30 px-6 py-2 font-sans text-sm font-bold text-indigo-50  transition hover:bg-indigo-800",
+                "bg-mainColor text-secondaryColor hover:bg-mainColor/70 flex h-[40px] w-full min-w-[150px] flex-shrink-0 items-center justify-center px-6 py-2 font-main  text-base font-medium uppercase  transition",
                 {
                   "animate-[buttonLoading_1.3s_linear_infinite] bg-gradient-to-r from-indigo-900 from-10% via-indigo-700 via-20% to-indigo-900 to-60% bg-[length:600px_50px]":
                     isSubmitting,
@@ -85,10 +93,10 @@ export default function SignInWithEmailPage() {
               Next
             </button>
           </form>
-          <div className="text-sm text-slate-400">
+          <div className=" text-center">
             <Link
               href={ROUTES.AUTH.SIGNIN}
-              className="flex items-center justify-center text-indigo-400 hover:underline"
+              className="text-mainColor text-sm font-medium uppercase hover:underline"
             >
               {"<"} All sign in options
             </Link>
