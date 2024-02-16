@@ -5,6 +5,10 @@ export default {
   content: ["./src/**/*.tsx"],
   theme: {
     extend: {
+      colors: {
+        mainColor: "#b0d9bf", //b0d9bf ff3845 a9d7a4 cce454 1cd77c
+        secondaryColor: "#0E0E17",
+      },
       fontFamily: {
         main: ["var(--font-main)", ...fontFamily.serif],
         complementary: ["var(--font-complementary)", ...fontFamily.serif],
