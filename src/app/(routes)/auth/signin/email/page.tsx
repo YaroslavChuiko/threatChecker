@@ -6,6 +6,7 @@ import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
+import Button from "~/components/buttons/Button";
 import SignInWithEmailResult from "~/components/SignInWithEmailResult";
 import { ROUTES } from "~/routes";
 
@@ -52,7 +53,7 @@ export default function SignInWithEmailPage() {
           <h2 className="mb-[30px] mt-[50px] text-lg font-medium uppercase">
             Sign in with email
           </h2>
-          <div className="text-mainColor/80 mb-[50px] text-sm">
+          <div className="mb-[50px] text-sm text-mainColor/80">
             Enter the email address associated with your account, and we&apos;ll
             send a magic link to your inbox.
           </div>
@@ -64,7 +65,7 @@ export default function SignInWithEmailPage() {
             <div className="flex flex-col gap-1 text-start">
               <label
                 htmlFor="email"
-                className="text-mainColor ml-2 font-medium uppercase"
+                className="ml-2 font-medium uppercase text-mainColor"
               >
                 ENTER Email:
               </label>
@@ -72,31 +73,30 @@ export default function SignInWithEmailPage() {
                 aria-label="email"
                 id="email"
                 type="text"
-                className="border-mainColor bg-mainColor/10 text-mainColor placeholder-mainColor/70 h-[40px] w-full flex-grow border px-2 py-2 font-main font-medium "
+                className="h-[40px] w-full flex-grow border border-mainColor bg-mainColor/10 px-2 py-2 font-main font-medium text-mainColor placeholder-mainColor/70 "
                 {...register("email")}
               />
               {errors?.email && (
-                <div className="font-sans text-sm font-bold text-rose-600">
+                <div className="ml-2 font-main text-sm font-medium text-[#ff3845]">
                   {errors.email.message}
                 </div>
               )}
             </div>
-            <button
-              className={clsx(
-                "bg-mainColor text-secondaryColor hover:bg-mainColor/70 flex h-[40px] w-full min-w-[150px] flex-shrink-0 items-center justify-center px-6 py-2 font-main  text-base font-medium uppercase  transition",
-                {
-                  "animate-[buttonLoading_1.3s_linear_infinite] bg-gradient-to-r from-indigo-900 from-10% via-indigo-700 via-20% to-indigo-900 to-60% bg-[length:600px_50px]":
-                    isSubmitting,
-                },
-              )}
+            <Button
+              className={clsx({
+                "animate-[buttonLoading_1.3s_linear_infinite] bg-secondaryColor bg-gradient-to-r from-mainColor from-10% via-mainColor/60 via-20% to-mainColor to-60% bg-[length:600px_50px]":
+                  isSubmitting,
+              })}
+              variant="primary"
+              type="submit"
             >
               Next
-            </button>
+            </Button>
           </form>
-          <div className=" text-center">
+          <div className="text-center">
             <Link
               href={ROUTES.AUTH.SIGNIN}
-              className="text-mainColor text-sm font-medium uppercase hover:underline"
+              className="text-sm font-medium uppercase text-mainColor hover:underline"
             >
               {"<"} All sign in options
             </Link>

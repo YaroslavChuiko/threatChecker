@@ -22,7 +22,7 @@ const Intro = () => {
           website malware and security checker
         </h2>
         <div className="ml-1">
-          <p className="mb-5 text-sm ">
+          <p className="mb-6 text-sm ">
             Enter a URL like example.com and the ThreatChecker scanner will
             check the website for known malware, viruses, blacklisting status,
             website errors, out-of-date software, and malicious code.
