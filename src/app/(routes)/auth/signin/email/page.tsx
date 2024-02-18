@@ -1,7 +1,6 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import clsx from "clsx";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useForm, type SubmitHandler } from "react-hook-form";
@@ -83,10 +82,7 @@ export default function SignInWithEmailPage() {
               )}
             </div>
             <Button
-              className={clsx({
-                "animate-[buttonLoading_1.3s_linear_infinite] bg-secondaryColor bg-gradient-to-r from-mainColor from-10% via-mainColor/60 via-20% to-mainColor to-60% bg-[length:600px_50px]":
-                  isSubmitting,
-              })}
+              isLoading={isSubmitting}
               variant="primary"
               type="submit"
             >

@@ -1,11 +1,11 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
+import Button from "~/components/buttons/Button";
 import AttentionIcon from "~/components/icons/AttentionIcon";
 import { ROUTES } from "~/routes";
 
@@ -67,18 +67,13 @@ export function ScanURLForm() {
             {...register("url")}
           />
         </div>
-        <button
+        <Button
+          variant="primary"
           type="submit"
-          className={clsx(
-            "bg-mainColor text-secondaryColor hover:bg-mainColor/70 flex h-[40px] min-w-[150px] flex-shrink-0 items-start justify-start px-2 py-1 font-main text-base font-medium  uppercase transition",
-            {
-              "animate-[buttonLoading_1.3s_linear_infinite] bg-gradient-to-r from-indigo-900 from-10% via-indigo-700 via-20% to-indigo-900 to-60% bg-[length:600px_50px]":
-                isScanning,
-            },
-          )}
+          isLoading={isScanning}
         >
           {isScanning ? "Processing..." : "Scan Website"}
-        </button>
+        </Button>
       </div>
       {errors?.url && (
         <div className="text-[#ff3845] flex items-center gap-2 font-main text-sm font-semibold leading-none">
