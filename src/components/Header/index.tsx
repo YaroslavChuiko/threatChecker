@@ -12,7 +12,7 @@ import { hideEmail } from "~/utils/hideEmail";
 import clsx from "clsx";
 
 const links = [
-  { href: ROUTES.PUBLIC.HOME, label: "Home" },
+  { href: ROUTES.PUBLIC.HOME, label: "Scanning console" },
   { href: ROUTES.PRIVATE.STATISTICS, label: "Statistics" },
 ];
 
@@ -37,21 +37,21 @@ const Header = ({ session }: Props) => {
   };
 
   return (
-    <header className="mx-4 flex items-center justify-between border-b border-mainColor pb-5 pt-5 text-mainColor">
-      <Logo className="h-8" />
+    <header className="mx-4 flex items-center justify-between border-b border-mainColor pb-3 pt-3 text-mainColor">
+      <Logo className="h-4" />
       <nav className="absolute right-1/2 translate-x-1/2 ">
         <ul className="flex items-center gap-9">
           {links.map(({ href, label }) => (
-            <li key={href} className="">
+            <li key={href}>
               <Link
                 href={href}
-                className="border-b border-transparent text-xl font-medium uppercase  text-mainColor/80  transition hover:text-mainColor"
-                // className={clsx(
-                //   "border-b border-transparent text-xl font-medium uppercase  text-[#f75049]/70  transition hover:text-[#f75049]",
-                //   {
-                //     "text-[#f75049]/100": pathname === href,
-                //   },
-                // )}
+                // className="border-b border-transparent text-lg font-medium uppercase  text-mainColor/80  transition hover:text-mainColor"
+                className={clsx(
+                  "border-b border-transparent text-lg font-medium uppercase  text-mainColor/70  transition hover:text-mainColor",
+                  {
+                    "text-mainColor/100": pathname === href,
+                  },
+                )}
               >
                 {label}
               </Link>
@@ -74,4 +74,5 @@ const Header = ({ session }: Props) => {
     </header>
   );
 };
+
 export default Header;
