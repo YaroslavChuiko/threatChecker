@@ -1,10 +1,5 @@
-import Intro from "./Intro";
+import Home from "./Home";
 
-export default async function Home() {
-
-  return (
-    <section className="flex items-center justify-center mt-32">
-      <Intro />
-    </section>
-  );
+export default async function HomePage() {
+  return <Home />;
 }
