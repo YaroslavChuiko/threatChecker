@@ -29,7 +29,7 @@ const PrimaryButton = ({
   return (
     <button
       className={clsx(
-        `flex h-[40px] min-w-[150px] flex-shrink-0 items-center justify-center bg-mainColor px-6 py-2 font-main text-base font-medium  uppercase text-secondaryColor transition  hover:bg-mainColor/70 ${className}`,
+        `flex h-[40px] min-w-[150px] flex-shrink-0 items-center justify-center bg-mainColor bg-noise px-6 py-2 font-main text-base font-medium  uppercase text-secondaryColor transition  hover:bg-mainColor/80 ${className}`,
         {
           "animate-[buttonLoading_1.3s_linear_infinite] bg-gradient-to-r from-mainColor from-10% via-[#738b7b] via-30% to-mainColor to-60% bg-[length:600px_50px]":
             isLoading,
