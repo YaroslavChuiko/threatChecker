@@ -6,7 +6,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        mainColor: "#b0d9bf", //b0d9bf ff3845 a9d7a4 cce454 1cd77c
+        mainColor: "#a9d7a4", //b0d9bf ff3845 a9d7a4 cce454 1cd77c
         secondaryColor: "#0E0E17",
       },
       fontFamily: {
@@ -18,9 +18,10 @@ export default {
           "linear-gradient(hsla(0,6%,7%,0) 50%,rgba(0,0,0,.25) 0),linear-gradient(90deg,rgba(255,0,0,.06),rgba(0,255,0,.02),rgba(0,0,255,.06));",
         // "gradient-scanlines":
         //   "linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));",
+        // "noise": "url(./src/assets/noise.svg)",
       },
       backgroundSize: {
-        "size-scanlines": "100% 2px, 3px 100%;",
+        "size-scanlines": "100% 3px, 3px 100%;",
       },
       keyframes: {
         verticalTicker: {
