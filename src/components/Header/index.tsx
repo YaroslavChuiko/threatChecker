@@ -37,21 +37,21 @@ const Header = ({ session }: Props) => {
   };
 
   return (
-    <header className="mx-4 flex items-center justify-between border-b border-mainColor pb-3 pt-3 text-mainColor">
-      <Logo className="h-4" />
+    <header className="mx-6 flex items-center justify-between border-b border-primary pb-3 pt-3 text-primary">
+      <Logo className="h-4 drop-shadow-primary-lg" />
       <nav className="absolute right-1/2 translate-x-1/2 ">
         <ul className="flex items-center gap-9">
           {links.map(({ href, label }) => (
             <li key={href}>
               <Link
                 href={href}
-                // className="border-b border-transparent text-lg font-medium uppercase  text-mainColor/80  transition hover:text-mainColor"
-                className={clsx(
-                  "border-b border-transparent text-lg font-medium uppercase  text-mainColor/70  transition hover:text-mainColor",
-                  {
-                    "text-mainColor/100": pathname === href,
-                  },
-                )}
+                className="text-lg font-medium uppercase  text-primary/80  transition hover:text-primary text-shadow-primary-lg"
+                // className={clsx(
+                //   "border-b border-transparent text-lg font-medium uppercase  text-primary/70  transition hover:text-primary",
+                //   {
+                //     "text-primary/100": pathname === href,
+                //   },
+                // )}
               >
                 {label}
               </Link>
@@ -65,7 +65,7 @@ const Header = ({ session }: Props) => {
         ) : null}
         {/* !! add angled corner to btn */}
         <button
-          className="border border-mainColor/30 bg-secondaryColor/80 px-5 py-1 font-main text-sm font-normal uppercase text-mainColor  transition hover:border-mainColor/100 hover:bg-mainColor/10 active:bg-mainColor/70 active:text-secondaryColor"
+          className="border border-primary/30 bg-secondary/10 px-5 py-1 font-main text-sm font-normal uppercase text-primary  transition hover:border-primary/100 hover:bg-primary/10 active:bg-primary/70 active:text-secondary shadow-[0px_0px_7px_1px]  hover:shadow-primary/30 shadow-primary/10 text-shadow-primary-lg"
           onClick={session ? handleSignOut : handleSignIn}
         >
           {session ? "Sign out" : "Sign in"}

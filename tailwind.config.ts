@@ -6,19 +6,25 @@ export default {
   theme: {
     extend: {
       colors: {
-        mainColor: "#a9d7a4", //b0d9bf ff3845 a9d7a4 cce454 1cd77c
-        secondaryColor: "#0E0E17",
+        primary: "#a9d7a4", //b0d9bf ff3845 a9d7a4 cce454 1cd77c
+        secondary: "#0E0E17",
+        error: "#ff3845",
       },
       fontFamily: {
         main: ["var(--font-main)", ...fontFamily.serif],
         complementary: ["var(--font-complementary)", ...fontFamily.serif],
+      },
+      dropShadow: {
+        "primary-md": "-3px -4px 1px rgb(var(--color-primary) / 0.2)",
+        "primary-lg": "-4px -4px 2px rgb(var(--color-primary) / 0.2)",
+        "error-md": "-3px -4px 1px rgb(var(--color-error) / 0.2)",
+        "error-lg": "-4px -4px 2px rgb(var(--color-error) / 0.2)",
       },
       backgroundImage: {
         "gradient-scanlines":
           "linear-gradient(hsla(0,6%,7%,0) 50%,rgba(0,0,0,.25) 0),linear-gradient(90deg,rgba(255,0,0,.06),rgba(0,255,0,.02),rgba(0,0,255,.06));",
         // "gradient-scanlines":
         //   "linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));",
-        // "noise": "url(./src/assets/noise.svg)",
       },
       backgroundSize: {
         "size-scanlines": "100% 3px, 3px 100%;",
@@ -119,10 +125,6 @@ export default {
           },
         },
       },
-      // animation: {
-      //   verticalTicker:
-      //     "verticalTicker 15s linear infinite",
-      // },
     },
   },
   plugins: [],

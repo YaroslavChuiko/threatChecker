@@ -56,14 +56,14 @@ export function ScanURLForm() {
     >
       <div className="flex w-full items-end gap-3">
         <div className="flex flex-grow flex-col text-start">
-          <label htmlFor="url" className="text-mainColor ml-2 text-lg">
+          <label htmlFor="url" className="text-primary ml-2 text-lg text-shadow-primary-lg">
             ENTER ADDRESS:
           </label>
           <input
             type="text"
             aria-label="url"
             id="url"
-            className="border-mainColor bg-mainColor/10 text-mainColor placeholder-mainColor/70 h-[40px] w-full flex-grow border px-2 py-2 font-main font-medium"
+            className="border-primary bg-primary/10 text-primary placeholder-primary/70 h-[40px] w-full flex-grow border px-2 py-2 font-main font-medium shadow-[0px_0px_7px_1px]  shadow-primary/10 text-shadow-primary-md"
             {...register("url")}
           />
         </div>
@@ -76,8 +76,8 @@ export function ScanURLForm() {
         </Button>
       </div>
       {errors?.url && (
-        <div className="text-[#ff3845] flex items-center gap-2 font-main text-sm font-semibold leading-none">
-          <AttentionIcon className="h-8 " />
+        <div className="text-error flex items-center gap-2 font-main text-sm font-medium leading-none text-shadow-error-md">
+          <AttentionIcon className="h-8 drop-shadow-error-lg" />
           <div>{errors.url.message}</div>
         </div>
       )}

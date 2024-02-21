@@ -21,21 +21,21 @@ type ProviderButton = {
 const providerButtons: ProviderButton[] = [
   {
     id: "google",
-    icon: <GoogleIcon className="mr-3 h-4 w-4" />,
+    icon: <GoogleIcon className="mr-3 h-4 w-4 drop-shadow-primary-lg" />,
     onClick: () => {
       void signIn("google", { callbackUrl: ROUTES.PUBLIC.HOME });
     },
   },
   {
     id: "github",
-    icon: <GithubIcon className="mr-3 h-4 w-4" />,
+    icon: <GithubIcon className="mr-3 h-4 w-4 drop-shadow-primary-lg" />,
     onClick: () => {
       void signIn("github", { callbackUrl: ROUTES.PUBLIC.HOME });
     },
   },
   {
     id: "discord",
-    icon: <DiscordIcon className="mr-3 h-4 w-4" />,
+    icon: <DiscordIcon className="mr-3 h-4 w-4 drop-shadow-primary-lg" />,
     onClick: () => {
       void signIn("discord", { callbackUrl: ROUTES.PUBLIC.HOME });
     },
@@ -56,7 +56,7 @@ export default function SignInPage() {
 
   return (
     <>
-      <div className="mb-[50px] mt-[50px] text-lg font-medium uppercase">
+      <div className="mb-[50px] mt-[50px] text-lg font-medium uppercase text-shadow-primary-lg">
         Sign in
       </div>
       <div className="mb-10 flex flex-col gap-2 text-start">
@@ -72,15 +72,15 @@ export default function SignInPage() {
           </Button>
         ))}
         <Button variant="secondary" onClick={handleSignInEmailClick}>
-          <EnvelopeIcon className="mr-3 h-4 w-4" /> Sign in with Email
+          <EnvelopeIcon className="mr-3 h-4 w-4 drop-shadow-primary-lg" /> Sign in with Email
         </Button>
       </div>
 
-      <div className="text-sm uppercase text-mainColor/80">
+      <div className="text-sm uppercase text-primary/80 text-shadow-primary-lg">
         Don&apos;t have an account?{" "}
         <Link
           href={ROUTES.AUTH.SIGNUP}
-          className="font-medium text-mainColor hover:underline"
+          className="font-medium text-primary hover:underline"
         >
           Sign up
         </Link>

@@ -49,10 +49,10 @@ export default function SignInWithEmailPage() {
         <SignInWithEmailResult email={getValues("email")} />
       ) : (
         <>
-          <h2 className="mb-[30px] mt-[50px] text-lg font-medium uppercase">
+          <h2 className="mb-[30px] mt-[50px] text-lg font-medium uppercase text-shadow-primary-lg">
             Sign in with email
           </h2>
-          <div className="mb-[50px] text-sm text-mainColor/80">
+          <div className="mb-[50px] text-sm text-primary/80 text-shadow-primary-md">
             Enter the email address associated with your account, and we&apos;ll
             send a magic link to your inbox.
           </div>
@@ -64,7 +64,7 @@ export default function SignInWithEmailPage() {
             <div className="flex flex-col gap-1 text-start">
               <label
                 htmlFor="email"
-                className="ml-2 font-medium uppercase text-mainColor"
+                className="ml-2 font-medium uppercase text-primary text-shadow-primary-lg"
               >
                 ENTER Email:
               </label>
@@ -72,11 +72,11 @@ export default function SignInWithEmailPage() {
                 aria-label="email"
                 id="email"
                 type="text"
-                className="h-[40px] w-full flex-grow border border-mainColor bg-mainColor/10 px-2 py-2 font-main font-medium text-mainColor placeholder-mainColor/70 "
+                className="h-[40px] w-full flex-grow border border-primary bg-primary/10 px-2 py-2 font-main font-medium text-primary placeholder-primary/70 text-shadow-primary-md"
                 {...register("email")}
               />
               {errors?.email && (
-                <div className="ml-2 font-main text-sm font-medium text-[#ff3845]">
+                <div className="ml-2 font-main text-sm font-medium text-error text-shadow-error-md">
                   {errors.email.message}
                 </div>
               )}
@@ -92,7 +92,7 @@ export default function SignInWithEmailPage() {
           <div className="text-center">
             <Link
               href={ROUTES.AUTH.SIGNIN}
-              className="text-sm font-medium uppercase text-mainColor hover:underline"
+              className="text-sm font-medium uppercase text-primary hover:underline text-shadow-primary-lg"
             >
               {"<"} All sign in options
             </Link>

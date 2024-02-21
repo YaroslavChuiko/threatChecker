@@ -9,7 +9,7 @@ export default async function Layout({
   return (
     <>
       <div className="h-4"></div>
-      <div className="bg-mainColor flex items-center justify-center text-secondaryColor mx-4 py-3 bg-noise">
+      <div className="bg-primary flex items-center justify-center text-secondary mx-6 py-3 bg-noise shadow-[-5px_-2px_1px_0px_rgba(169,215,164,0.2),-12px_-4px_1px_0px_rgba(169,215,164,0.1),-18px_-6px_1px_0px_rgba(169,215,164,0.04),5px_-2px_1px_0px_rgba(169,215,164,0.2),12px_-4px_1px_0px_rgba(169,215,164,0.1),18px_-6px_1px_0px_rgba(169,215,164,0.04)]">
         <Logo className="h-4" />
       </div>
       <main className="flex items-start justify-center">
