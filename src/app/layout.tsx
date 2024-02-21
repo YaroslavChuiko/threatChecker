@@ -1,20 +1,20 @@
 import "~/styles/globals.css";
 
-import { JetBrains_Mono, DM_Sans } from "next/font/google";
+import { Orbitron, Rajdhani } from "next/font/google";
 import { cookies } from "next/headers";
 
 import { TRPCReactProvider } from "~/trpc/react";
 
-const dmSans = DM_Sans({
+const rajdhani = Rajdhani({
   subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-sans",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-main",
 });
 
-const jetBrainsMono = JetBrains_Mono({
+const orbitron = Orbitron({
   subsets: ["latin"],
-  weight: ["400", "700"],
-  variable: "--font-jetBrains-mono",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-complementary",
 });
 
 export const metadata = {
@@ -31,7 +31,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`bg-[#060522] font-mono ${dmSans.variable} ${jetBrainsMono.variable} overflow-x-hidden  bg-gradient-to-b from-[#061434] to-[#060522] to-[70svh] text-white`}
+        className={`bg-secondary font-main ${rajdhani.variable} ${orbitron.variable} relative min-h-screen overflow-x-hidden bg-gradient-scanlines bg-size-scanlines pb-20 text-primary`}
       >
         <TRPCReactProvider cookies={cookies().toString()}>
           {children}

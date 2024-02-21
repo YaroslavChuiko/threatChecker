@@ -1,13 +1,20 @@
 import Link from "next/link";
-import React from "react";
-import EyeIcon from "../icons/EyeIcon";
+import { type ComponentProps } from "react";
 import { ROUTES } from "~/routes";
+import ArasakaLogo from "../icons/ArasakaLogo";
+import NetwatchLogo from "../icons/NetwatchLogo";
 
-const Logo = () => {
+type Props = {
+  className?: string;
+} & ComponentProps<"svg">;
+
+const Logo = ({ className, ...rest }: Props) => {
   return (
-    <Link className="flex items-center justify-center" href={ROUTES.PUBLIC.HOME}>
-      <EyeIcon className="h-8 w-8" />
-      <span className="pl-2 font-mono text-lg leading-none">ThreatMinder</span>
+    <Link
+      className="flex items-center justify-center"
+      href={ROUTES.PUBLIC.HOME}
+    >
+      <NetwatchLogo className={className} {...rest} />
     </Link>
   );
 };

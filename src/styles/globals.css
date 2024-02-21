@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer base {
+  :root {
+    --color-primary: 169 215 164;
+    --color-secondary: 14 14 23;
+    --color-error: 255 56 69;
+  }
+}
+
+@layer utilities {
+  .bg-noise {
+    background-image: url(../assets/noise.svg);
+  }
+
+  .text-shadow-primary-md {
+    text-shadow: -3px -4px 1px rgba(var(--color-primary) / 0.2);
+  }
+  .text-shadow-primary-lg {
+    text-shadow: -4px -4px 2px rgba(var(--color-primary) / 0.2);
+  }
+  .text-shadow-error-md {
+    text-shadow: -3px -4px 1px rgba(var(--color-error) / 0.2);
+  }
+  .text-shadow-error-lg {
+    text-shadow: -4px -4px 2px rgb(var(--color-error) / 0.2);
+  }
+}

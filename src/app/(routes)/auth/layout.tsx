@@ -1,40 +1,25 @@
+import Footer from "~/components/Footer";
 import Logo from "~/components/Logo";
-import { generateRows } from "~/utils/generateTextRows";
 
-const rows = generateRows(100, 300);
-
-export default async function Layout({ children }: { children: React.ReactNode }) {
-
-  const textGroup = (
-    <div className="animate-[verticalTicker_60s_linear_infinite]">
-      {rows.map((row, index) => (
-        <div
-          className="animate-[textGlitch_1.6s_linear_infinite] whitespace-pre font-mono text-[12px] leading-tight text-[#7d9ddf]"
-          // style={{ fontFamily: "Courier, monospace" }}
-          key={index}
-        >
-          {row}
-        </div>
-      ))}
-    </div>
-  );
+export default async function Layout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <main className="flex min-h-screen items-start justify-center">
-      <div className="relative h-screen flex-grow">
-        <div className="absolute inset-6 flex  items-center justify-center overflow-hidden rounded-3xl border-2 border-[#061434] bg-[#061434] shadow-lg shadow-[rgba(8,11,22,.2)] ">
-          <div className="bg-[rgb(6, 20, 52)] pointer-events-none  absolute inset-0 h-full w-full select-none before:pointer-events-none before:absolute before:inset-0 before:z-10 before:block before:bg-gradient-scanlines  before:bg-size-scanlines before:blur-[0.5px] before:content-[''] ">
-            {textGroup}
-            {textGroup}
+    <>
+      <div className="h-4"></div>
+      <div className="bg-primary flex items-center justify-center text-secondary mx-6 py-3 bg-noise shadow-[-5px_-2px_1px_0px_rgba(169,215,164,0.2),-12px_-4px_1px_0px_rgba(169,215,164,0.1),-18px_-6px_1px_0px_rgba(169,215,164,0.04),5px_-2px_1px_0px_rgba(169,215,164,0.2),12px_-4px_1px_0px_rgba(169,215,164,0.1),18px_-6px_1px_0px_rgba(169,215,164,0.04)]">
+        <Logo className="h-4" />
+      </div>
+      <main className="flex items-start justify-center">
+        <div className="flex w-[400px] items-start justify-center px-10 py-[100px]">
+          <div className="w-full flex-col items-center justify-center text-center">
+            {children}
           </div>
         </div>
-      </div>
-
-      <div className="flex w-[400px] items-start justify-center px-10 py-[80px]">
-        <div className="w-full flex-col pt-[60px] items-start justify-center text-center shadow-xl shadow-[rgba(8,11,22,.2)]">
-          <Logo />
-          {children}
-        </div>
-      </div>
-    </main>
+      </main>
+      <Footer />
+    </>
   );
 }

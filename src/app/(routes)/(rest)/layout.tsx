@@ -1,3 +1,4 @@
+import Footer from "~/components/Footer";
 import Header from "~/components/Header";
 import { getServerAuthSession } from "~/server/auth";
 
@@ -9,6 +10,7 @@ export default async function Layout({ children }: { children: React.ReactNode }
     <>
       <Header session={session}/>
       <main>{children}</main>
+      <Footer />
     </>
   );
 }

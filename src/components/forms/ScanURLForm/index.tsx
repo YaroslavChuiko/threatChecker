@@ -1,11 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import clsx from "clsx";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
+import Button from "~/components/buttons/Button";
+import AttentionIcon from "~/components/icons/AttentionIcon";
 import { ROUTES } from "~/routes";
 
 const errorMessages =
@@ -53,29 +54,31 @@ export function ScanURLForm() {
       onSubmit={handleSubmit(onSubmit)}
       className="flex w-full flex-col items-center justify-center gap-5"
     >
-      <div className="flex w-full gap-5">
-        <input
-          type="text"
-          placeholder="https://www.example.com"
-          className="h-[60px] w-full flex-grow border border-slate-400 bg-slate-900 px-4 py-2 font-sans font-bold text-white"
-          {...register("url")}
-        />
-        <button
+      <div className="flex w-full items-end gap-3">
+        <div className="flex flex-grow flex-col text-start">
+          <label htmlFor="url" className="text-primary ml-2 text-lg text-shadow-primary-lg">
+            ENTER ADDRESS:
+          </label>
+          <input
+            type="text"
+            aria-label="url"
+            id="url"
+            className="border-primary bg-primary/10 text-primary placeholder-primary/70 h-[40px] w-full flex-grow border px-2 py-2 font-main font-medium shadow-[0px_0px_7px_1px]  shadow-primary/10 text-shadow-primary-md"
+            {...register("url")}
+          />
+        </div>
+        <Button
+          variant="primary"
           type="submit"
-          className={clsx(
-            "flex h-[60px] min-w-[200px] flex-shrink-0 items-center justify-center border border-slate-400 bg-indigo-900 font-sans font-bold text-indigo-50  transition hover:bg-indigo-800",
-            {
-              "animate-[buttonLoading_1.3s_linear_infinite] bg-gradient-to-r from-indigo-900 from-10% via-indigo-700 via-20% to-indigo-900 to-60% bg-[length:600px_50px]":
-                isScanning,
-            },
-          )}
+          isLoading={isScanning}
         >
           {isScanning ? "Processing..." : "Scan Website"}
-        </button>
+        </Button>
       </div>
       {errors?.url && (
-        <div className="font-sans text-base font-bold text-rose-600">
-          {errors.url.message}
+        <div className="text-error flex items-center gap-2 font-main text-sm font-medium leading-none text-shadow-error-md">
+          <AttentionIcon className="h-8 drop-shadow-error-lg" />
+          <div>{errors.url.message}</div>
         </div>
       )}
     </form>
