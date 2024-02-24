@@ -8,6 +8,8 @@ export default {
       colors: {
         primary: "#a9d7a4", //b0d9bf ff3845 a9d7a4 cce454 1cd77c
         secondary: "#0E0E17",
+        success: '#1ded83',
+        warning: '#f0b537',
         error: "#ff3845",
       },
       fontFamily: {
@@ -17,6 +19,10 @@ export default {
       dropShadow: {
         "primary-md": "-3px -4px 1px rgb(var(--color-primary) / 0.2)",
         "primary-lg": "-4px -4px 2px rgb(var(--color-primary) / 0.2)",
+        "success-md": "-3px -4px 1px rgb(var(--color-success) / 0.2)",
+        "success-lg": "-4px -4px 2px rgb(var(--color-success) / 0.2)",
+        "warning-md": "-3px -4px 1px rgb(var(--color-warning) / 0.2)",
+        "warning-lg": "-4px -4px 2px rgb(var(--color-warning) / 0.2)",
         "error-md": "-3px -4px 1px rgb(var(--color-error) / 0.2)",
         "error-lg": "-4px -4px 2px rgb(var(--color-error) / 0.2)",
       },
@@ -38,92 +44,18 @@ export default {
           from: { backgroundPosition: "-300px 0" },
           to: { backgroundPosition: "300px 0" },
         },
-        textGlitch: {
-          "0%": {
-            textShadow:
-              "0.4389924193300864px 0 1px rgba(0,30,255,0.5), -0.4389924193300864px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "5%": {
-            textShadow:
-              "2.7928974010788217px 0 1px rgba(0,30,255,0.5), -2.7928974010788217px 0 1px rgba(255,0,80,0.3), 0 0 3px;",
-          },
-          "10%": {
-            textShadow:
-              "0.02956275843481219px 0 1px rgba(0,30,255,0.5), -0.02956275843481219px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "15%": {
-            textShadow:
-              "0.40218538552878136px 0 1px rgba(0,30,255,0.5), -0.40218538552878136px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "20%": {
-            textShadow:
-              "3.4794037899852017px 0 1px rgba(0,30,255,0.5), -3.4794037899852017px 0 1px rgba(255,0,80,0.3), 0 0 3px;",
-          },
-          "25%": {
-            textShadow:
-              "1.6125630401149584px 0 1px rgba(0,30,255,0.5), -1.6125630401149584px 0 1px rgba(255,0,80,0.3), 0 0 3px;",
-          },
-          "30%": {
-            textShadow:
-              "0.7015590085143956px 0 1px rgba(0,30,255,0.5), -0.7015590085143956px 0 1px rgba(255,0,80,0.3), 0 0 3px;",
-          },
-          "35%": {
-            textShadow:
-              "3.896914047650351px 0 1px rgba(0,30,255,0.5), -3.896914047650351px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "40%": {
-            textShadow:
-              "3.870905614848819px 0 1px rgba(0,30,255,0.5), -3.870905614848819px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "45%": {
-            textShadow:
-              "2.231056963361899px 0 1px rgba(0,30,255,0.5), -2.231056963361899px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "50%": {
-            textShadow:
-              "0.08084290417898504px 0 1px rgba(0,30,255,0.5), -0.08084290417898504px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "55%": {
-            textShadow:
-              "2.3758461067427543px 0 1px rgba(0,30,255,0.5), -2.3758461067427543px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "60%": {
-            textShadow:
-              "2.202193051050636px 0 1px rgba(0,30,255,0.5), -2.202193051050636px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "65%": {
-            textShadow:
-              "2.8638780614874975px 0 1px rgba(0,30,255,0.5), -2.8638780614874975px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "70%": {
-            textShadow:
-              "0.48874025155497314px 0 1px rgba(0,30,255,0.5), -0.48874025155497314px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "75%": {
-            textShadow:
-              "1.8948491305757957px 0 1px rgba(0,30,255,0.5), -1.8948491305757957px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "80%": {
-            textShadow:
-              "0.0833037308038857px 0 1px rgba(0,30,255,0.5), -0.0833037308038857px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "85%": {
-            textShadow:
-              "0.09769827255241735px 0 1px rgba(0,30,255,0.5), -0.09769827255241735px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "90%": {
-            textShadow:
-              "3.443339761481782px 0 1px rgba(0,30,255,0.5), -3.443339761481782px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "95%": {
-            textShadow:
-              "2.1841838852799786px 0 1px rgba(0,30,255,0.5), -2.1841838852799786px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
-          "100%": {
-            textShadow:
-              "2.6208764473832513px 0 1px rgba(0,30,255,0.5), -2.6208764473832513px 0 1px rgba(255,0,80,0.3), 0 0 3px",
-          },
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+      },
+      animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
   },
