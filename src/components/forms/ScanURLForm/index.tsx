@@ -72,7 +72,7 @@ export function ScanURLForm() {
           type="submit"
           isLoading={isScanning}
         >
-          {isScanning ? "Processing..." : "Scan Website"}
+          {isScanning ? "Processing..." : "Scan Target"}
         </Button>
       </div>
       {errors?.url && (
