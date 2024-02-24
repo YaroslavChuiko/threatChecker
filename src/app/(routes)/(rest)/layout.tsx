@@ -9,8 +9,8 @@ export default async function Layout({ children }: { children: React.ReactNode }
   return (
     <>
       <Header session={session}/>
-      <main>{children}</main>
-      <Footer />
+      <main className="flex flex-col grow">{children}</main>
+      {/* <Footer /> */}
     </>
   );
 }
