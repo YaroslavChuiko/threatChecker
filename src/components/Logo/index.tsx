@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { type ComponentProps } from "react";
 import { ROUTES } from "~/routes";
-import ArasakaLogo from "../icons/ArasakaLogo";
 import NetwatchLogo from "../icons/NetwatchLogo";
 
 type Props = {

@@ -3,5 +3,5 @@
       <feTurbulence type="fractalNoise" baseFrequency="0.60" numOctaves="3" stitchTiles="stitch"/>
       <feBlend mode="screen"/>
     </filter>
-    <rect width="200" height="200" filter="url(#noise)" opacity="0.35"/>
+    <rect width="200" height="200" filter="url(#noise)" opacity="0.05"/>
 </svg>
