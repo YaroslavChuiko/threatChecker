@@ -7,7 +7,7 @@ export const analyzeRouter = createTRPCRouter({
   scan: publicProcedure
     .input(z.object({ url: z.string().url({ message: "Invalid url" }) }))
     .mutation(async ({ ctx, input }) => {
-      const { embeddedScripts, referencedScriptLinks, externalLinks } =
+      const { embeddedScripts, referencedScriptLinks, foundLinks } =
         await parseHTMLFromURL(input.url);
       const downloadedScripts = await downloadScripts(referencedScriptLinks);
       const scriptsToScan = [...embeddedScripts, ...downloadedScripts];
@@ -32,7 +32,7 @@ export const analyzeRouter = createTRPCRouter({
 
       return {
         referencedScriptLinks,
-        externalLinks,
+        foundLinks,
         vulnerabilityCoef: Array.from(result.values()).reduce(
           (acc, item) => acc + item.relativeWeight,
           0,
@@ -59,17 +59,17 @@ const parseHTMLFromURL = async (url: string) => {
     .toArray()
     .filter((url) => z.string().url().safeParse(url).success);
 
-  const externalLinks: string[] = $("a[href]")
+  const foundLinks: string[] = $("a[href]")
     .map((i, el) => $(el).attr("href"))
     .toArray()
     .filter((link) => !link.startsWith("#"));
 
-    console.log("externalLinks", externalLinks);
+    console.log("foundLinks", foundLinks);
     console.log("referencedScriptLinks", referencedScriptLinks);
     console.log("referencedScriptLinks.length", referencedScriptLinks.length);
     console.log("embeddedScripts.length", embeddedScripts.length);
 
-  return { embeddedScripts, referencedScriptLinks, externalLinks };
+  return { embeddedScripts, referencedScriptLinks, foundLinks };
 };
 
 const downloadScripts = async (scriptURLList: string[]) => {
