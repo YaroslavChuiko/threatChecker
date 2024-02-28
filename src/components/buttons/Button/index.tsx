@@ -37,7 +37,7 @@ const PrimaryButton = ({
           className,
         ),
         {
-          "animate-[buttonLoading_1.3s_linear_infinite] bg-gradient-to-r from-primary from-10% via-[#738b7b] via-30% to-primary to-60% bg-[length:600px_50px]":
+          "animate-[button-loading_1.3s_linear_infinite] bg-gradient-to-r from-primary from-10% via-[#738b7b] via-30% to-primary to-60% bg-[length:600px_50px]":
             isLoading,
         },
       )}

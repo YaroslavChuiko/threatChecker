@@ -36,11 +36,11 @@ export default {
         "size-scanlines": "100% 3px, 3px 100%;",
       },
       keyframes: {
-        verticalTicker: {
+        "vertical-ticker": {
           from: { transform: "translate3d(0, 0, 0)" },
           to: { transform: "translate3d(0, -100%, 0)" },
         },
-        buttonLoading: {
+        'button-loading': {
           from: { backgroundPosition: "-300px 0" },
           to: { backgroundPosition: "300px 0" },
         },
