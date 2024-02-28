@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -17,17 +18,69 @@ type Props = {
   };
 };
 
+type SecurityRiskStatusLabel =
+  | "minimal"
+  | "low"
+  | "medium"
+  | "high"
+  | "critical";
+
+type SecurityRiskStatusColor = "success" | "warning" | "error";
+
+type SecurityRiskStatus = {
+  label: SecurityRiskStatusLabel;
+  color: SecurityRiskStatusColor;
+};
+
+const securityRiskLabels: SecurityRiskStatusLabel[] = [
+  "minimal",
+  "low",
+  "medium",
+  "high",
+  "critical",
+];
+
+const calculateSecurityRiskStatus = (
+  vulnerabilityCoef: number,
+): SecurityRiskStatus => {
+  if (vulnerabilityCoef < 0.2) {
+    return { label: "minimal", color: "success" };
+  }
+
+  if (vulnerabilityCoef < 0.4) {
+    return { label: "low", color: "warning" };
+  }
+
+  if (vulnerabilityCoef < 0.6) {
+    return { label: "medium", color: "warning" };
+  }
+
+  if (vulnerabilityCoef < 0.8) {
+    return { label: "high", color: "error" };
+  }
+
+  return { label: "critical", color: "error" };
+};
+
 export default async function ResultsPage({ searchParams: { query } }: Props) {
   if (!query) {
     notFound();
   }
 
-  // const data = await api.analyze.scan.mutate({ url: query });
+  const session = await getServerAuthSession();
+  const data = await api.analyze.scan.mutate({ url: query });
 
-  await new Promise((resolve) => {
-    setTimeout(resolve, 5000);
-  });
-  // const session = await getServerAuthSession();
+  if (!data) {
+    notFound();
+  }
+
+  const securityRiskStatus = calculateSecurityRiskStatus(
+    data.vulnerabilityCoef,
+  );
+
+  // await new Promise((resolve) => {
+  //   setTimeout(resolve, 5000);
+  // });
 
   return (
     <section className="flex grow content-start items-center justify-center">
@@ -44,58 +97,100 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
           <div className="flex flex-col items-start border border-primary bg-primary/5 pb-8 pt-8 shadow-[0px_0px_5px_2px] shadow-primary/20">
             <div className="mb-5 w-full px-6">
               <h2 className="text-shadow-primary-lg mb-5 w-full truncate text-lg  font-medium leading-none">
-                https://github.com/vuejs/ecosystem-ci/actions/runs/8029583738/job/21936045284
+                {query}
               </h2>
               <div className="w-full border-b border-primary/30 pr-3" />
             </div>
 
             <div className="ml-6 mr-2 max-h-[550px] overflow-y-auto">
-              <div className="pl-4 pr-8 mb-7">
-                <div className="mb-6 flex items-center justify-center gap-2 text-base font-medium uppercase text-warning">
-                  <AttentionIcon className="h-8 drop-shadow-warning-lg" />
-                  <div className="text-shadow-warning-lg">
-                    Hight security risc
+              <div className="mb-7 pl-4 pr-8">
+                <div
+                  className={clsx(
+                    "mb-6 flex items-center justify-center gap-2 text-base font-medium uppercase",
+                    `text-${securityRiskStatus.color}`,
+                  )}
+                >
+                  <AttentionIcon
+                    className={clsx(
+                      "h-8",
+                      `drop-shadow-${securityRiskStatus.color}-lg`,
+                    )}
+                  />
+                  <div
+                    className={clsx(
+                      `text-shadow-${securityRiskStatus.color}-lg`,
+                    )}
+                  >
+                    {securityRiskStatus.label} security risc
                   </div>
                 </div>
                 <div className="relative mb-8">
-                  <div className="mb-1 h-[5px] bg-warning/20 drop-shadow-warning-lg">
-                    <div className="h-full w-[33%] bg-warning"></div>
+                  <div
+                    className={clsx(
+                      "mb-1 h-[5px]",
+                      `bg-${securityRiskStatus.color}/20 drop-shadow-${securityRiskStatus.color}-lg`,
+                    )}
+                  >
+                    <div
+                      style={{ width: `${data.vulnerabilityCoef * 100}%` }}
+                      className={clsx(
+                        "h-full",
+                        `bg-${securityRiskStatus.color}`,
+                      )}
+                    ></div>
                   </div>
 
-                  <div className="text-shadow-warning-md flex items-center justify-between text-xs font-medium text-warning">
-                    <div>Minimal</div>
-                    <div>Low</div>
-                    <div>Medium</div>
-                    <div>High</div>
-                    <div>Critical</div>
-                  </div>
-                </div>
-
-                {/* <div className="text-shadow-warning-lg mb-3 text-sm text-warning">
-                  <span className="text-base font-medium uppercase">
-                    Possible attacks:{" "}
-                  </span>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Obcaecati dignissimos placeat quod recusandae sit minus
-                  officia, ipsam, impedit quasi quisquam hic. Error, quis.
-                  Aperiam recusandae blanditiis vero repellendus, ea, in, autem
-                  incidunt quae atque magni mollitia harum totam maiores
-                  adipisci dolorem quis illo? Enim aliquid fugit nemo
-                  necessitatibus facere dolor!
-                </div> */}
-
-                <div className="mb-3 flex flex-col items-center justify-center bg-warning px-6 py-2 text-sm  text-secondary drop-shadow-warning-lg">
-                  <div className="font-bold uppercase">Access denied!</div>
-                  <div className="font-medium">
-                    <Link
-                      href={ROUTES.AUTH.SIGNIN}
-                      className="font-semibold underline"
-                    >
-                      Sign in
-                    </Link>{" "}
-                    to access the report and more details
+                  <div
+                    className={clsx(
+                      "flex items-center justify-between text-xs font-medium",
+                      `text-shadow-${securityRiskStatus.color}-md text-${securityRiskStatus.color}`,
+                    )}
+                  >
+                    {securityRiskLabels.map((label) => (
+                      <div key={label} className="capitalize">
+                        {label}
+                      </div>
+                    ))}
                   </div>
                 </div>
+
+                {session ? (
+                  <div
+                    className={clsx(
+                      "mb-3 text-sm",
+                      `text-shadow-${securityRiskStatus.color}-lg text-${securityRiskStatus.color}`,
+                    )}
+                  >
+                    <span className="text-base font-medium uppercase">
+                      Possible attacks:{" "}
+                    </span>
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Obcaecati dignissimos placeat quod recusandae sit minus
+                    officia, ipsam, impedit quasi quisquam hic. Error, quis.
+                    Aperiam recusandae blanditiis vero repellendus, ea, in,
+                    autem incidunt quae atque magni mollitia harum totam maiores
+                    adipisci dolorem quis illo? Enim aliquid fugit nemo
+                    necessitatibus facere dolor!
+                  </div>
+                ) : (
+                  <div
+                    className={clsx(
+                      "mb-3 flex flex-col items-center justify-center px-6 py-2 text-sm  text-secondary",
+                      `drop-shadow-${securityRiskStatus.color}-lg bg-${securityRiskStatus.color}`,
+                    )}
+                  >
+                    <div className="font-bold uppercase">Access denied!</div>
+                    <div className="font-medium">
+                      <Link
+                        href={ROUTES.AUTH.SIGNIN}
+                        className="font-semibold underline"
+                      >
+                        Sign in
+                      </Link>{" "}
+                      to access the report and more details
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div className="my-5 mr-4  border-b-[1px] border-primary/30" />
@@ -105,9 +200,9 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
                   <span className="text-base font-medium uppercase">
                     URL Address:{" "}
                   </span>
-                  https://github.com/vuejs/ecosystem-ci/actions/runs/8029583738/job/21936045284
+                  {query}
                 </div>
-                <div className="mb-5 grid grid-cols-2 gap-3">
+                <div className="mb-5 grid grid-cols-2 gap-x-5 gap-y-3">
                   <div className=" text-base">
                     <span className="text-base font-medium uppercase">
                       IP Address:{" "}
@@ -143,225 +238,23 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
 
               <Accordion className="mr-4" type="single" collapsible>
                 <AccordionItem value="item-1">
-                  <AccordionTrigger>Internal links found</AccordionTrigger>
-                  <AccordionContent className="max-h-[250px] overflow-y-auto">
-                    <p>/work</p>
-                    <p>/</p>
-                    <p>/graphic-design</p>
-                    <p>/art</p>
-                    <p>/about</p>
-                    <p>/contact</p>
-                    <p>/quote</p>
-                    <p>/social</p>
-                    <p>/privacy-policy</p>
-                    <p>/s/2nd-Amendment-Logo-Resource-3lne.zip</p>
-                    <p>/s/4ST-Store-Logo-Resource-cybc.zip</p>
-                    <p>/s/6th-Street-Gang-Logo-Resource-d3kz.zip</p>
-                    <p>/s/18-Logo-Resource.zip</p>
-                    <p>/s/24-7-Store-Logo-Resource-epah.zip</p>
-                    <p>/s/54-News-logo-Resource.zip</p>
-                    <p>/s/Aerondight-Logo-Resource.zip</p>
-                    <p>/s/Aldecaldos-logo-Resource.zip</p>
-                    <p>/s/All-Foods-Logo-Resources-z2xg.zip</p>
-                    <p>/s/All-World-Insurance-Logo-Resource.zip</p>
-                    <p>/s/Animals-Logo-Resource-ctk9.zip</p>
-                    <p>/s/Aoba-logo-Resource.zip</p>
-                    <p>/s/Arasaka-Logo-Resources-876x.zip</p>
-                    <p>/s/Archer-logo-Resource.zip</p>
-                    <p>/s/Archer-Tires-logo-Resource.zip</p>
-                    <p>/s/Astoria-logo-resource.zip</p>
-                    <p>/s/ATAK-Logo-Resource.zip</p>
-                    <p>/s/Attuned-In-logo-Resource.zip</p>
-                    <p>/s/Avante-Logo-Resource.zip</p>
-                    <p>/s/Ballsy-logo-Resource.zip</p>
-                    <p>/s/Battys-Hotel-logo-Resource.zip</p>
-                    <p>/s/Bayside-Cachet-logo-Resource.zip</p>
-                    <p>/s/Beep-logo-Resource.zip</p>
-                    <p>/s/Below-Deck-logo-Resource-5xnx.zip</p>
-                    <p>/s/Biotechnica-logo-Resource.zip</p>
-                    <p>/s/Bliss-Logo-Resource-e57l.zip</p>
-                    <p>/s/Bohemia-logo-Resource.zip</p>
-                    <p>/s/Bolshevik-logo-Resource.zip</p>
-                    <p>/s/Bottoms-at-the-Top-Resource.zip</p>
-                    <p>/s/Brain-Wash-logo-Resource.zip</p>
-                    <p>/s/Braindance-Caution-Tag-Resource-psrn.zip</p>
-                    <p>/s/Braindance-logo-resource-2dc5.zip</p>
-                    <p>/s/Braingasm-logo-Resource.zip</p>
-                    <p>/s/Brennan-logo-Resource.zip</p>
-                    <p>/s/Brooklyn-Barista-Logo-Resource-4jxw.zip</p>
-                    <p>/s/Buck-A-Slice-Logo-Resource-p4h2.zip</p>
-                    <p>/s/Budget-Arms-Resource.zip</p>
-                    <p>/s/Bumelant-Logo-Resource-cewb.zip</p>
-                    <p>/s/Burrito-XXL-logo-Resource.zip</p>
-                    <p>/s/BuryGer-logo-Resource.zip</p>
-                    <p>/s/Cali-Express-Logo-Resource-py5l.zip</p>
-                    <p>/s/Capitan-Caliente-Logo-Resource-tplz.zip</p>
-                    <p>/s/CC-Logo-Resources.zip</p>
-                    <p>/s/Centzon-Totochtin-Resource-sbhp.zip</p>
-                    <p>/s/Champaradise-logo-Resource.zip</p>
-                    <p>/s/Channel-54-Logo-Resource.zip</p>
-                    <p>/s/Checkered-Flags-logo-Resource.zip</p>
-                    <p>/s/Chevillon-logo-Resource.zip</p>
-                    <p>/s/Chromanticore-logo-Resource-6g39.zip</p>
-                    <p>/s/Cinema-logo-resource-tcx8.zip</p>
-                    <p>/s/Cirrus-Cola-Logos-Resource-brgj.zip</p>
-                    <p>/s/Clouds-Clouds-logo-Resource.zip</p>
-                    <p>/s/Combat-Cab-Logo-Resource-st95.zip</p>
-                    <p>/s/Connected-Disconnected-icon-Resource-fghs.zip</p>
-                    <p>/s/Constitutional-Arms-Resource-pa2t.zip</p>
-                    <p>/s/Corp-Bud-logo-Resource.zip</p>
-                    <p>/s/Cyberdeck-Module-logo-Resource.zip</p>
-                    <p>/s/Cyberpunk-logo-Resource.zip</p>
-                    <p>/s/Cyberware-Logo-Resource-x36y.zip</p>
-                    <p>/s/Dakai-logo-Resource.zip</p>
-                    <p>/s/Darra-Polytechnic-logo-Resource.zip</p>
-                    <p>/s/Data-Inc-Logo-Resource-52s4.zip</p>
-                    <p>/s/Ded-Zed-Logo-Resource.zip</p>
-                    <p>/s/Delamain-Taxi-logo-resource-y9fx.zip</p>
-                    <p>/s/Devils-Luck-logo-Resource-2rc3.zip</p>
-                    <p>/s/Dewdrop-Inn-logo-Resource.zip</p>
-                    <p>/s/Dex-Logo-Resources-wtyj.zip</p>
-                    <p>/s/DTR_Logo.zip</p>
-                    <p>/s/Dynalar-logo-Resource-74e3.zip</p>
-                    <p>/s/Edgenet-logo-Resource.zip</p>
-                    <p>/s/EezyBeef-logo-Resource.zip</p>
-                    <p>/s/El-Coyote-Cojo-Logo-Resource.zip</p>
-                    <p>/s/El-Guapo-Logo-Resource-cr9a.zip</p>
-                    <p>/s/El-Pinche-Pollo-Logo-Resource.zip</p>
-                    <p>/s/Electronic-Murderer-logo-Resource.zip</p>
-                    <p>/s/Sample-Text-logo-Resource.zip</p>
-                    <p>/s/Exit-Sign-Green-Resource-e5h5.zip</p>
-                    <p>/s/Fingers-MD-logo-Resource.zip</p>
-                    <p>/s/Foodscape-Logo-Resource-t6n9.zip</p>
-                    <p>/s/Free-City-Beauty-logo-Resource.zip</p>
-                    <p>/s/Fuyutsuki-Logo-Resource-4ysx.zip</p>
-                    <p>/s/Gas-Logo-Resource.zip</p>
-                    <p>/s/Got-Chrome-Logo-Resource.zip</p>
-                    <p>/s/Grand-Imperial-Mall-logo-Resource-acz9.zip</p>
-                    <p>/s/Guard-Pacc-logo-resource-w5zf.zip</p>
-                    <p>/s/Hamra-Levantine-Cuisine-logo-Resource.zip</p>
-                    <p>/s/Herrera-logo-Resource.zip</p>
-                    <p>/s/Hot-Mess-Logo-Resource-92kf.zip</p>
-                    <p>/s/Hotel-Marquess-logo-Resource.zip</p>
-                    <p>/s/Hydro-Subsidium-logo-Resource.zip</p>
-                    <p>/s/Infinity-Symbol-Logo-Resource.zip</p>
-                    <p>/s/Insta-Food-logo-Resource.zip</p>
-                    <p>/s/Jacked-and-Coke-logo-Resource.zip</p>
-                    <p>/s/Jig-Jig-Street-logo-Resource.zip</p>
-                    <p>/s/Jinguji-logo-Resource.zip</p>
-                    <p>/s/Kabayan-Foods-Logo-Resource-bhrb.zip</p>
-                    <p>/s/Kang-Tao-logo-Resource.zip</p>
-                    <p>/s/Karaoke-logo-Resource.zip</p>
-                    <p>/s/Kaukaz-logo-Resource.zip</p>
-                    <p>/s/Kendachi-Logo-Resource.zip</p>
-                    <p>/s/Khalil-Rousseau-Logo-Resource.zip</p>
-                    <p>/s/King-Size-logo-Resource-cd8m.zip</p>
-                    <p>/s/Kiroshi-logo-resource-tphl.zip</p>
-                    <p>/s/Konpeki-Plaza-logo-Resource.zip</p>
-                    <p>/s/Las-Palapas-logo-Resource.zip</p>
-                    <p>/s/Lizzies-Bar-Logo-Resource.zip</p>
-                    <p>/s/Lizzies-Logo-Resource.zip</p>
-                    <p>/s/Lizzy-Wizzy-logo-Resource-839m.zip</p>
-                    <p>/s/Loading-Archive-logo-Resource.zip</p>
-                    <p>/s/Los-Osos-logo-Resource.zip</p>
-                    <p>/s/Love-Hub-logo-Resource.zip</p>
-                    <p>/s/Love-logo-Resource.zip</p>
-                    <p>/s/Mac-N-Cheezus-Logo-Resource.zip</p>
-                    <p>/s/Macroware-Logo-Resource-phna.zip</p>
-                    <p>/s/Maelstrom-Logos-Resource-bshf.zip</p>
-                    <p>/s/Mahir-logo-Resource.zip</p>
-                    <p>/s/Makigai-logo-Resource.zip</p>
-                    <p>/s/Malorian-logo-Resource.zip</p>
-                    <p>/s/Mark-X-24-logo-resource-gx7e.zip</p>
-                    <p>/s/Masala-Studios-Resource-dzlx.zip</p>
-                    <p>/s/Matapang-Coffee-logo-Resource.zip</p>
-                    <p>/s/Maxiwear-Logo-Resource.zip</p>
-                    <p>/s/MAX-TAC-logo-Resource.zip</p>
-                    <p>/s/Medtech-Logo-Resource-e9ms.zip</p>
-                    <p>/s/Megapax-Export-logo-Resource.zip</p>
-                    <p>/s/Metro-Logo-Resource-d5zx.zip</p>
-                    <p>/s/Microwave-logo-Resource.zip</p>
-                    <p>/s/Midnight-Arms-logo-Resource.zip</p>
-                    <p>/s/Midnight-Lady-Logo-Resource.zip</p>
-                    <p>/s/Milfguard-logo-Resource.zip</p>
-                    <p>/s/Militech-Logo-Resources-w7xy.zip</p>
-                    <p>/s/Mistys-Clock-design-Resource.zip</p>
-                    <p>/s/Esoterica-logo-Resource.zip</p>
-                    <p>/s/Mizutani-Logo-Resource.zip</p>
-                    <p>/s/Moore-Logo-Resource.zip</p>
-                    <p>/s/Mr-Stud-logo-resource.zip</p>
-                    <p>/s/NC-Industries-Logo-Resource-ljed.zip</p>
-                    <p>/s/NCART-logo-resource-jh8b.zip</p>
-                    <p>/s/NCPD-logo-resource-mhhp.zip</p>
-                    <p>/s/Netwatch-logo-resource-5nmc.zip</p>
-                    <p>/s/New-Empire-logo-Resource.zip</p>
-                    <p>/s/Next-Technology-logo-Resource.zip</p>
-                    <p>/s/Nicola-logo-Resource-7h2g.zip</p>
-                    <p>/s/Night-City-Hall-logo-resource.zip</p>
-                    <p>/s/Night-City-Pin-logo-Resource.zip</p>
-                    <p>
-                      /s/Night-City-Police-Department-Full-logo-Resource.zip
-                    </p>
-                    <p>/s/Night-City-Vending-Machines-Logo-Resource.zip</p>
-                    <p>/s/Nokota-logo-Resource.zip</p>
-                    <p>/s/Numbers-Resource.zip</p>
-                    <p>/s/Orbital-Air-logo-Resource-b3f4.zip</p>
-                    <p>/s/Peep-Show-logo-Resource.zip</p>
-                    <p>/s/Petrochem-logo-Resource.zip</p>
-                    <p>/s/Planetran-logo-resource.zip</p>
-                    <p>/s/Pierogi-World-logo-Resource.zip</p>
-                    <p>/s/Piez-Logo-Resource-gy7e.zip</p>
-                    <p>/s/Protocol-Logos-Resource.zip</p>
-                    <p>/s/P-Sky-System-Logo-Resource.zip</p>
-                    <p>/s/Pure-Overkill-logo-Resource.zip</p>
-                    <p>/s/Quadra-Logo-Resource-wxtc.zip</p>
-                    <p>/s/Rayfield-logo-Resource.zip</p>
-                    <p>/s/RCS-Logo-Resource.zip</p>
-                    <p>/s/Real-Water-logo-Resource.zip</p>
-                    <p>/s/Relic-Logo-Resource.zip</p>
-                    <p>/s/Riot-Logo-Resource-wrbk.zip</p>
-                    <p>/s/Rostovic-logo-Resource.zip</p>
-                    <p>/s/RX-7000F-Logo-Resource.zip</p>
-                    <p>/s/Samurai-Logo-Resource.zip</p>
-                    <p>/s/Sandblast-logo-Resource.zip</p>
-                    <p>/s/Set-Sail-Logo-Resource.zip</p>
-                    <p>/s/Shwab-logo-resource-hxzc.zip</p>
-                    <p>/s/Softsys-Revised-Logo-Resource-7bbn.zip</p>
-                    <p>/s/Sojasil-Machistador-Logo-Resource.zip</p>
-                    <p>/s/Somos-la-Muerte-logo-Resource.zip</p>
-                    <p>/s/Spunky-Monkey-Logo-Resource-m9px.zip</p>
-                    <p>/s/Stand-Clear-logo-Resource.zip</p>
-                    <p>/s/Tao-Industries-Logo-Resource-p6ds.zip</p>
-                    <p>/s/Tengu-Logo-Resource.zip</p>
-                    <p>/s/Textpohnka-logo-Resource.zip</p>
-                    <p>/s/The-Afterlife-logo-resource.zip</p>
-                    <p>/s/The-Atlantis-logo-Resource-b4ww.zip</p>
-                    <p>/s/Madqueen-Show-Logo-Resource.zip</p>
-                    <p>/s/The-Moxes-Logo-Resource.zip</p>
-                    <p>/s/Thorton-logo-Resource-ex2j.zip</p>
-                    <p>/s/Totentanz-Logo-Resource-kgnj.zip</p>
-                    <p>/s/Toxic-Symbol-Resource.zip</p>
-                    <p>/s/Trauma-Team-logo-Resources.zip</p>
-                    <p>/s/Tsunami-logo-Resource.zip</p>
-                    <p>/s/Turbo-Logo-Resource-neey.zip</p>
-                    <p>/s/Tyger-Claws-Full-logo-Resource.zip</p>
-                    <p>/s/Valentinos-Gang-Logo-Resource-638w.zip</p>
-                    <p>/s/Vargas-Logo-Resource-zkfs.zip</p>
-                    <p>/s/Villefort-logo-Resource.zip</p>
-                    <p>/s/Voodoo-Boys-Logo-Resource-h74h.zip</p>
-                    <p>/s/Warning-Labels-Resource.zip</p>
-                    <p>/s/Wet-Dream-logo-Resource.zip</p>
-                    <p>/s/WNS-News-logo-Resource.zip</p>
-                    <p>/s/X9-Resource-54zm.zip</p>
-                    <p>/s/Yaiba-logo-resource-54js.zip</p>
-                    <p>/s/Zetatech-Logo-Resource-4pll.zip</p>
-                    <p>/s/Ziggy-Q-logo-Resource.zip</p>
+                  <AccordionTrigger>Links found</AccordionTrigger>
+                  <AccordionContent>
+                    {data.foundLinks.length
+                      ? data.foundLinks.map((link) => (
+                          <p key={link}>{link}</p>
+                        ))
+                      : "No links found"}
                   </AccordionContent>
                 </AccordionItem>
                 <AccordionItem value="item-2">
-                  <AccordionTrigger>External links found</AccordionTrigger>
-                  <AccordionContent>
-                    Yes. It adheres to the WAI-ARIA design pattern.
+                  <AccordionTrigger>JavaScript included</AccordionTrigger>
+                  <AccordionContent className="max-h-[250px] overflow-y-auto">
+                    {data.referencedScriptLinks.length
+                      ? data.referencedScriptLinks.map((link) => (
+                          <p key={link}>{link}</p>
+                        ))
+                      : "No JavaScript included"}
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
