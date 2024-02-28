@@ -50,7 +50,7 @@ const Header = ({ session }: Props) => {
           CKC 151 CC10 AS5
         </div>
       </div>
-      <nav className="bg-noise absolute bottom-[-6px] right-1/2 translate-x-1/2 bg-secondary py-2 px-1">
+      <nav className="bg-noise absolute bottom-[-3px] right-1/2 translate-x-1/2 bg-secondary p-1">
         <ul className="flex items-center gap-1">
           {links.map(({ href, label }) => (
             <li key={href}>
@@ -72,21 +72,21 @@ const Header = ({ session }: Props) => {
           ))}
         </ul>
       </nav>
-      <div className="flex items-center gap-8">
+      <div className="flex items-center gap-10">
         {session?.user?.email ? (
           <div className="text-shadow-primary-md text-xs">
             {hideEmail(session.user.email)}
           </div>
         ) : null}
         <button
-          className="text-shadow-primary-lg relative mr-4 flex items-center gap-2 font-main text-sm font-normal uppercase text-primary/80 transition hover:text-primary"
+          className="text-shadow-primary-lg relative mr-4 flex items-center gap-2 font-main text-base font-normal uppercase text-primary/80 transition hover:text-primary"
           onClick={session ? handleSignOut : handleSignIn}
         >
-          <AttentionAltIcon className="h-3 drop-shadow-primary-lg" />
+          <AttentionAltIcon className="h-[14px] drop-shadow-primary-lg" />
           {session ? "Sign out" : "Sign in"}
 
           <div
-            className="pointer-events-none absolute bottom-[-16px] left-1 w-20 select-none text-left text-[3px] uppercase leading-none text-primary/60"
+            className="pointer-events-none absolute bottom-[-18px] left-1 w-[110px] select-none text-left text-[4px] uppercase leading-none text-primary/60"
             aria-hidden="true"
           >
             Only CC35 certified and DMSF 5im class Officers are allowed to
