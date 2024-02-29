@@ -79,7 +79,7 @@ const Header = ({ session }: Props) => {
           </div>
         ) : null}
         <button
-          className="text-shadow-primary-lg relative mr-4 flex items-center gap-2 font-main text-base font-normal uppercase text-primary/80 transition hover:text-primary"
+          className="text-shadow-primary-lg relative mr-7 flex items-center gap-2 font-main text-base font-normal uppercase text-primary/80 transition hover:text-primary"
           onClick={session ? handleSignOut : handleSignIn}
         >
           <AttentionAltIcon className="h-[14px] drop-shadow-primary-lg" />

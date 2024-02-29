@@ -62,6 +62,42 @@ const calculateSecurityRiskStatus = (
   return { label: "critical", color: "error" };
 };
 
+const textColorMappings = {
+  success: "text-success",
+  warning: "text-warning",
+  error: "text-error",
+};
+
+const bgColorMappings = {
+  success: "bg-success",
+  warning: "bg-warning",
+  error: "bg-error",
+};
+
+const bgColorOpacityMappings = {
+  success: "bg-success/20",
+  warning: "bg-warning/20",
+  error: "bg-error/20",
+};
+
+const dropShadowLgMappings = {
+  success: "drop-shadow-success-lg",
+  warning: "drop-shadow-warning-lg",
+  error: "drop-shadow-error-lg",
+};
+
+const textShadowLgMappings = {
+  success: "text-shadow-success-lg",
+  warning: "text-shadow-warning-lg",
+  error: "text-shadow-error-lg",
+};
+
+const textShadowMdMappings = {
+  success: "text-shadow-success-md",
+  warning: "text-shadow-warning-md",
+  error: "text-shadow-error-md",
+};
+
 export default async function ResultsPage({ searchParams: { query } }: Props) {
   if (!query) {
     notFound();
@@ -102,162 +138,175 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
               <div className="w-full border-b border-primary/30 pr-3" />
             </div>
 
-            <div className="ml-6 mr-2 max-h-[550px] overflow-y-auto">
-              <div className="mb-7 pl-4 pr-8">
-                <div
-                  className={clsx(
-                    "mb-6 flex items-center justify-center gap-2 text-base font-medium uppercase",
-                    `text-${securityRiskStatus.color}`,
-                  )}
-                >
-                  <AttentionIcon
-                    className={clsx(
-                      "h-8",
-                      `drop-shadow-${securityRiskStatus.color}-lg`,
-                    )}
-                  />
+            <div className="pl-6 pr-2 w-full">
+              <div className="max-h-[550px] overflow-y-auto w-full">
+                <div className="mb-7 w-full pl-4 pr-8">
                   <div
                     className={clsx(
-                      `text-shadow-${securityRiskStatus.color}-lg`,
+                      "mb-6 flex items-center justify-center gap-2 text-base font-medium uppercase",
+                      textColorMappings[securityRiskStatus.color],
                     )}
                   >
-                    {securityRiskStatus.label} security risc
-                  </div>
-                </div>
-                <div className="relative mb-8">
-                  <div
-                    className={clsx(
-                      "mb-1 h-[5px]",
-                      `bg-${securityRiskStatus.color}/20 drop-shadow-${securityRiskStatus.color}-lg`,
-                    )}
-                  >
-                    <div
-                      style={{ width: `${data.vulnerabilityCoef * 100}%` }}
+                    <AttentionIcon
                       className={clsx(
-                        "h-full",
-                        `bg-${securityRiskStatus.color}`,
+                        "h-8",
+                        dropShadowLgMappings[securityRiskStatus.color],
                       )}
-                    ></div>
-                  </div>
-
-                  <div
-                    className={clsx(
-                      "flex items-center justify-between text-xs font-medium",
-                      `text-shadow-${securityRiskStatus.color}-md text-${securityRiskStatus.color}`,
-                    )}
-                  >
-                    {securityRiskLabels.map((label) => (
-                      <div key={label} className="capitalize">
-                        {label}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {session ? (
-                  <div
-                    className={clsx(
-                      "mb-3 text-sm",
-                      `text-shadow-${securityRiskStatus.color}-lg text-${securityRiskStatus.color}`,
-                    )}
-                  >
-                    <span className="text-base font-medium uppercase">
-                      Possible attacks:{" "}
-                    </span>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Obcaecati dignissimos placeat quod recusandae sit minus
-                    officia, ipsam, impedit quasi quisquam hic. Error, quis.
-                    Aperiam recusandae blanditiis vero repellendus, ea, in,
-                    autem incidunt quae atque magni mollitia harum totam maiores
-                    adipisci dolorem quis illo? Enim aliquid fugit nemo
-                    necessitatibus facere dolor!
-                  </div>
-                ) : (
-                  <div
-                    className={clsx(
-                      "mb-3 flex flex-col items-center justify-center px-6 py-2 text-sm  text-secondary",
-                      `drop-shadow-${securityRiskStatus.color}-lg bg-${securityRiskStatus.color}`,
-                    )}
-                  >
-                    <div className="font-bold uppercase">Access denied!</div>
-                    <div className="font-medium">
-                      <Link
-                        href={ROUTES.AUTH.SIGNIN}
-                        className="font-semibold underline"
-                      >
-                        Sign in
-                      </Link>{" "}
-                      to access the report and more details
+                    />
+                    <div
+                      className={clsx(
+                        textShadowLgMappings[securityRiskStatus.color],
+                      )}
+                    >
+                      {securityRiskStatus.label} security risc
                     </div>
                   </div>
-                )}
-              </div>
+                  <div className="mb-8">
+                    <div
+                      className={clsx(
+                        "mb-1 h-[5px]",
+                        `${bgColorOpacityMappings[securityRiskStatus.color]} ${
+                          dropShadowLgMappings[securityRiskStatus.color]
+                        }`,
+                      )}
+                    >
+                      <div
+                        style={{ width: `${data.vulnerabilityCoef * 100}%` }}
+                        className={clsx(
+                          "h-full",
+                          bgColorMappings[securityRiskStatus.color],
+                        )}
+                      ></div>
+                    </div>
 
-              <div className="my-5 mr-4  border-b-[1px] border-primary/30" />
+                    <div
+                      className={clsx(
+                        "flex items-center justify-between text-xs font-medium",
+                        // `text-shadow-${securityRiskStatus.color}-md text-${securityRiskStatus.color}`,
+                        `${textShadowMdMappings[securityRiskStatus.color]} ${
+                          textColorMappings[securityRiskStatus.color]
+                        }`,
+                      )}
+                    >
+                      {securityRiskLabels.map((label) => (
+                        <div key={label} className="capitalize">
+                          {label}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
 
-              <div className="mb-7 pl-4 pr-8 pt-2 ">
-                <div className="mb-5 text-sm">
-                  <span className="text-base font-medium uppercase">
-                    URL Address:{" "}
-                  </span>
-                  {query}
+                  {session ? (
+                    <div
+                      className={clsx(
+                        "mb-3 text-sm",
+                        // `text-shadow-${securityRiskStatus.color}-lg text-${securityRiskStatus.color}`,
+                        `${textShadowLgMappings[securityRiskStatus.color]} ${
+                          textColorMappings[securityRiskStatus.color]
+                        }`,
+                      )}
+                    >
+                      <span className="text-base font-medium uppercase">
+                        Possible attacks:{" "}
+                      </span>
+                      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                      Obcaecati dignissimos placeat quod recusandae sit minus
+                      officia, ipsam, impedit quasi quisquam hic. Error, quis.
+                      Aperiam recusandae blanditiis vero repellendus, ea, in,
+                      autem incidunt quae atque magni mollitia harum totam
+                      maiores adipisci dolorem quis illo? Enim aliquid fugit
+                      nemo necessitatibus facere dolor!
+                    </div>
+                  ) : (
+                    <div
+                      className={clsx(
+                        "mb-3 flex flex-col items-center justify-center px-6 py-2 text-sm  text-secondary",
+                        // `drop-shadow-${securityRiskStatus.color}-lg bg-${securityRiskStatus.color}`,
+                        `${bgColorMappings[securityRiskStatus.color]} ${
+                          dropShadowLgMappings[securityRiskStatus.color]
+                        }`,
+                      )}
+                    >
+                      <div className="font-bold uppercase">Access denied!</div>
+                      <div className="font-medium">
+                        <Link
+                          href={ROUTES.AUTH.SIGNIN}
+                          className="font-semibold underline"
+                        >
+                          Sign in
+                        </Link>{" "}
+                        to access the report and more details
+                      </div>
+                    </div>
+                  )}
                 </div>
-                <div className="mb-5 grid grid-cols-2 gap-x-5 gap-y-3">
-                  <div className=" text-base">
+
+                <div className="my-5 border-b-[1px] border-primary/30 mr-4" />
+
+                <div className="mb-7 pl-4 pr-8 pt-2 ">
+                  <div className="mb-3 text-sm">
                     <span className="text-base font-medium uppercase">
-                      IP Address:{" "}
+                      URL Address:{" "}
                     </span>
-                    151.101.1.197
+                    {query}
                   </div>
-                  <div className="text-base">
-                    <span className="text-base font-medium uppercase">
-                      Hosting:{" "}
-                    </span>
-                    N/A
-                  </div>
-                  <div className=" text-base">
-                    <span className="text-base font-medium uppercase">
-                      Server:{" "}
-                    </span>
-                    N/A
-                  </div>
-                  <div className=" text-base">
-                    <span className="text-base font-medium uppercase">
-                      CMS:{" "}
-                    </span>
-                    N/A
-                  </div>
-                  <div className=" text-base">
-                    <span className="text-base font-medium uppercase">
-                      Powered by:{" "}
-                    </span>
-                    N/A
+                  <div className="mb-5 grid grid-cols-2 gap-x-5 gap-y-3">
+                    <div className=" text-base">
+                      <span className="text-base font-medium uppercase">
+                        IP Address:{" "}
+                      </span>
+                      151.101.1.197
+                    </div>
+                    <div className="text-base">
+                      <span className="text-base font-medium uppercase">
+                        Hosting:{" "}
+                      </span>
+                      N/A
+                    </div>
+                    <div className=" text-base">
+                      <span className="text-base font-medium uppercase">
+                        Server:{" "}
+                      </span>
+                      N/A
+                    </div>
+                    <div className=" text-base">
+                      <span className="text-base font-medium uppercase">
+                        CMS:{" "}
+                      </span>
+                      N/A
+                    </div>
+                    <div className=" text-base">
+                      <span className="text-base font-medium uppercase">
+                        Powered by:{" "}
+                      </span>
+                      N/A
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <Accordion className="mr-4" type="single" collapsible>
-                <AccordionItem value="item-1">
-                  <AccordionTrigger>Links found</AccordionTrigger>
-                  <AccordionContent>
-                    {data.foundLinks.length
-                      ? data.foundLinks.map((link) => (
-                          <p key={link}>{link}</p>
-                        ))
-                      : "No links found"}
-                  </AccordionContent>
-                </AccordionItem>
-                <AccordionItem value="item-2">
-                  <AccordionTrigger>JavaScript included</AccordionTrigger>
-                  <AccordionContent className="max-h-[250px] overflow-y-auto">
-                    {data.referencedScriptLinks.length
-                      ? data.referencedScriptLinks.map((link) => (
-                          <p key={link}>{link}</p>
-                        ))
-                      : "No JavaScript included"}
-                  </AccordionContent>
-                </AccordionItem>
-              </Accordion>
+                <Accordion className="pr-4" type="single" collapsible>
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>Links found</AccordionTrigger>
+                    <AccordionContent>
+                      {data.foundLinks.length
+                        ? data.foundLinks.map((link) => (
+                            <p key={link}>{link}</p>
+                          ))
+                        : "No links found"}
+                    </AccordionContent>
+                  </AccordionItem>
+                  <AccordionItem value="item-2">
+                    <AccordionTrigger>JavaScript included</AccordionTrigger>
+                    <AccordionContent className="max-h-[250px] overflow-y-auto">
+                      {data.referencedScriptLinks.length
+                        ? data.referencedScriptLinks.map((link) => (
+                            <p key={link}>{link}</p>
+                          ))
+                        : "No JavaScript included"}
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+              </div>
             </div>
           </div>
         </div>
