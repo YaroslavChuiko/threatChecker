@@ -2,6 +2,7 @@ import { z } from "zod";
 import * as cheerio from "cheerio";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { type ThreatSignature } from "@prisma/client";
+import crypto from 'crypto';
 
 export const analyzeRouter = createTRPCRouter({
   scan: publicProcedure
@@ -19,6 +20,65 @@ export const analyzeRouter = createTRPCRouter({
       );
 
       const result = scanScript(scriptsToScan.join("\n"), threatSignatures);
+
+      const virusTotalURL = await fetch(
+        `https://www.virustotal.com/api/v3/urls/${crypto.createHash('sha256').update(input.url).digest('hex')}`,
+        {
+          method: "GET",
+          headers: {
+            "x-apikey":
+              "970a3a713f378a5ca017766f4d9841fe3abd8c9cd9b1e176d257818855dbe9a7",
+          },
+        },
+      );
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      const virusTotalResult = await virusTotalURL.json();
+      console.log("virusTotalResult !!!!!!!!!!", virusTotalResult);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      console.log("last_analysis_stats:", virusTotalResult?.data?.attributes?.last_analysis_stats);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      console.log("last_analysis_results::", virusTotalResult?.data?.attributes?.last_analysis_results);
+
+      // const virusTotalURL = await fetch(
+      //   "https://www.virustotal.com/api/v3/urls",
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       // "Content-Type": "application/x-www-form-urlencoded",
+      //       accept: "application/json",
+      //       "Content-Type": "application/json",
+      //       "x-apikey":
+      //         "970a3a713f378a5ca017766f4d9841fe3abd8c9cd9b1e176d257818855dbe9a7",
+      //     },
+      //     body: JSON.stringify({
+      //       data: {
+      //         type: "url",
+      //         attributes: {
+      //           url: input.url,
+      //         },
+      //       },
+      //     }),
+      //   },
+      // );
+      // // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      // const virusTotalResult = await virusTotalURL.json();
+      // console.log("virusTotalResult !!!!!!!!!!", virusTotalResult);
+
+      // const virusTotalAnalyses = await fetch(
+      //   // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      //   `https://www.virustotal.com/api/v3/analyses/${virusTotalResult?.data?.id}`,
+      //   {
+      //     method: "GET",
+      //     headers: {
+      //       "x-apikey":
+      //         "970a3a713f378a5ca017766f4d9841fe3abd8c9cd9b1e176d257818855dbe9a7",
+      //     },
+      //   },
+      // );
+
+      // // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      // const virusTotalRes = await virusTotalAnalyses.json();
+      // console.log("virusTotalAnalysesResult", virusTotalRes);
 
       console.log(`${result.size} of ${threatSignatures.length}`);
       console.log(
@@ -64,10 +124,10 @@ const parseHTMLFromURL = async (url: string) => {
     .toArray()
     .filter((link) => !link.startsWith("#"));
 
-    console.log("foundLinks", foundLinks);
-    console.log("referencedScriptLinks", referencedScriptLinks);
-    console.log("referencedScriptLinks.length", referencedScriptLinks.length);
-    console.log("embeddedScripts.length", embeddedScripts.length);
+  console.log("foundLinks", foundLinks);
+  console.log("referencedScriptLinks", referencedScriptLinks);
+  console.log("referencedScriptLinks.length", referencedScriptLinks.length);
+  console.log("embeddedScripts.length", embeddedScripts.length);
 
   return { embeddedScripts, referencedScriptLinks, foundLinks };
 };
