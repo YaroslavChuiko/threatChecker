@@ -54,11 +54,11 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
             <div className="pl-6 pr-2 w-full">
               <div className="max-h-[550px] overflow-y-auto w-full">
 
-                <SecurityRiskStatusSection vulnerabilityCoef={data.vulnerabilityCoef} session={session} /> 
+                <SecurityRiskStatusSection securityRiskCoef={data.securityRiskCoef} possibleAttacks={data.possibleAttacks} session={session} /> 
 
                 <div className="my-5 border-b-[1px] border-primary/30 mr-4" />
 
-                <div className="mb-7 pl-4 pr-8 pt-2 ">
+                <div className="mb-7 pl-4 pr-8 pt-2 text-shadow-primary-lg">
                   <div className="mb-3 text-sm">
                     <span className="text-base font-medium uppercase">
                       URL Address:{" "}

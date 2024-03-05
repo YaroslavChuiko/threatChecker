@@ -30,21 +30,21 @@ const securityRiskLabels: SecurityRiskStatusLabel[] = [
 ];
 
 const calculateSecurityRiskStatus = (
-  vulnerabilityCoef: number,
+  securityRiskCoef: number,
 ): SecurityRiskStatus => {
-  if (vulnerabilityCoef < 0.2) {
+  if (securityRiskCoef < 0.2) {
     return { label: "minimal", color: "success" };
   }
 
-  if (vulnerabilityCoef < 0.4) {
+  if (securityRiskCoef < 0.4) {
     return { label: "low", color: "warning" };
   }
 
-  if (vulnerabilityCoef < 0.7) {
+  if (securityRiskCoef < 0.7) {
     return { label: "medium", color: "warning" };
   }
 
-  if (vulnerabilityCoef < 0.8) {
+  if (securityRiskCoef < 0.8) {
     return { label: "high", color: "error" };
   }
 
@@ -88,16 +88,23 @@ const textShadowMdMappings = {
 };
 
 type Props = {
-  vulnerabilityCoef: number;
+  securityRiskCoef: number;
+  possibleAttacks: string[];
   session: Session | null;
 };
 
-const SecurityRiskStatusSection = ({ vulnerabilityCoef, session }: Props) => {
+const SecurityRiskStatusSection = ({
+  securityRiskCoef,
+  possibleAttacks,
+  session,
+}: Props) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const securityRiskStatus = calculateSecurityRiskStatus(vulnerabilityCoef);
+  const securityRiskStatus = calculateSecurityRiskStatus(securityRiskCoef);
 
-  const signinRedirectUrl = `${ROUTES.AUTH.SIGNIN}?from=${pathname}?${searchParams.toString()}`;
+  const signinRedirectUrl = `${
+    ROUTES.AUTH.SIGNIN
+  }?from=${pathname}?${searchParams.toString()}`;
 
   return (
     <div className="mb-7 w-full pl-4 pr-8">
@@ -127,7 +134,7 @@ const SecurityRiskStatusSection = ({ vulnerabilityCoef, session }: Props) => {
           )}
         >
           <div
-            style={{ width: `${vulnerabilityCoef * 100}%` }}
+            style={{ width: `${securityRiskCoef * 100}%` }}
             className={clsx(
               "h-full",
               bgColorMappings[securityRiskStatus.color],
@@ -138,7 +145,6 @@ const SecurityRiskStatusSection = ({ vulnerabilityCoef, session }: Props) => {
         <div
           className={clsx(
             "flex items-center justify-between text-xs font-medium",
-            // `text-shadow-${securityRiskStatus.color}-md text-${securityRiskStatus.color}`,
             `${textShadowMdMappings[securityRiskStatus.color]} ${
               textColorMappings[securityRiskStatus.color]
             }`,
@@ -156,7 +162,6 @@ const SecurityRiskStatusSection = ({ vulnerabilityCoef, session }: Props) => {
         <div
           className={clsx(
             "mb-3 text-sm",
-            // `text-shadow-${securityRiskStatus.color}-lg text-${securityRiskStatus.color}`,
             `${textShadowLgMappings[securityRiskStatus.color]} ${
               textColorMappings[securityRiskStatus.color]
             }`,
@@ -165,18 +170,16 @@ const SecurityRiskStatusSection = ({ vulnerabilityCoef, session }: Props) => {
           <span className="text-base font-medium uppercase">
             Possible attacks:{" "}
           </span>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Obcaecati
-          dignissimos placeat quod recusandae sit minus officia, ipsam, impedit
-          quasi quisquam hic. Error, quis. Aperiam recusandae blanditiis vero
-          repellendus, ea, in, autem incidunt quae atque magni mollitia harum
-          totam maiores adipisci dolorem quis illo? Enim aliquid fugit nemo
-          necessitatibus facere dolor!
+          {possibleAttacks.length === 0 ? (
+            <span className="text-base">None</span>
+          ) : (
+            `${possibleAttacks.join(", ")}.`
+          )}
         </div>
       ) : (
         <div
           className={clsx(
             "mb-3 flex flex-col items-center justify-center px-6 py-2 text-sm  text-secondary",
-            // `drop-shadow-${securityRiskStatus.color}-lg bg-${securityRiskStatus.color}`,
             `${bgColorMappings[securityRiskStatus.color]} ${
               dropShadowLgMappings[securityRiskStatus.color]
             }`,
