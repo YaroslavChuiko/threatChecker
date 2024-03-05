@@ -90,13 +90,20 @@ export const analyzeRouter = createTRPCRouter({
       );
       console.log(result);
 
+      const possibleAttacks = new Set<string>(Array.from(result.values()).map(
+        (item) => item.description,
+      ));
+
+      console.log("possibleAttacks", possibleAttacks);
+
       return {
         referencedScriptLinks,
         foundLinks,
-        vulnerabilityCoef: Array.from(result.values()).reduce(
+        securityRiskCoef: Array.from(result.values()).reduce(
           (acc, item) => acc + item.relativeWeight,
           0,
         ),
+        possibleAttacks: Array.from(possibleAttacks),
       };
     }),
 });
