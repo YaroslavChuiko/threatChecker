@@ -3,6 +3,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { z } from "zod";
 import SignInWithEmailResult from "~/components/SignInWithEmailResult";
@@ -25,6 +26,8 @@ const EmailSignUpSchema = z.object({
 type EmailSignUpForm = z.infer<typeof EmailSignUpSchema>;
 
 export default function SignUpWithEmailPage() {
+  const searchParams = useSearchParams();
+
   const {
     register,
     formState: { errors, isSubmitting, isSubmitSuccessful },
@@ -38,7 +41,7 @@ export default function SignUpWithEmailPage() {
   const onSubmit: SubmitHandler<EmailSignUpForm> = async ({ email }) => {
     await signIn("email", {
       email,
-      callbackUrl: ROUTES.PUBLIC.HOME,
+      callbackUrl: searchParams.get("from") ?? ROUTES.PUBLIC.HOME,
       redirect: false,
     });
   };
@@ -86,7 +89,7 @@ export default function SignUpWithEmailPage() {
           </form>
           <div className="text-center">
             <Link
-              href={ROUTES.AUTH.SIGNUP}
+              href={`${ROUTES.AUTH.SIGNUP}?${searchParams.toString()}`}
               className="text-sm font-medium uppercase text-primary hover:underline text-shadow-primary-lg"
             >
               {"<"} All sign up options

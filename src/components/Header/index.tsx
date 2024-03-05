@@ -2,7 +2,7 @@
 
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { ROUTES } from "~/routes";
 import clsx from "clsx";
 import { useEffect } from "react";
@@ -25,6 +25,7 @@ type Props = {
 const Header = ({ session }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     router.prefetch(ROUTES.AUTH.SIGNIN);
@@ -35,7 +36,7 @@ const Header = ({ session }: Props) => {
   };
 
   const handleSignIn = () => {
-    router.push(ROUTES.AUTH.SIGNIN);
+    router.push(`${ROUTES.AUTH.SIGNIN}?from=${pathname}?${searchParams.toString()}`);
   };
 
   return (

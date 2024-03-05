@@ -3,8 +3,8 @@
 import { type BuiltInProviderType } from "next-auth/providers/index";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, type MouseEventHandler, type ReactNode } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { type MouseEvent, useEffect, type MouseEventHandler, type ReactNode } from "react";
 import Button from "~/components/buttons/Button";
 import DiscordIcon from "~/components/icons/DiscordIcon";
 import EnvelopeIcon from "~/components/icons/EnvelopeIcon";
@@ -15,43 +15,41 @@ import { ROUTES } from "~/routes";
 type ProviderButton = {
   id: BuiltInProviderType;
   icon: ReactNode;
-  onClick: MouseEventHandler<HTMLButtonElement>;
 };
 
 const providerButtons: ProviderButton[] = [
   {
     id: "google",
     icon: <GoogleIcon className="mr-3 h-4 w-4 drop-shadow-primary-lg" />,
-    onClick: () => {
-      void signIn("google", { callbackUrl: ROUTES.PUBLIC.HOME });
-    },
   },
   {
     id: "github",
     icon: <GithubIcon className="mr-3 h-4 w-4 drop-shadow-primary-lg" />,
-    onClick: () => {
-      void signIn("github", { callbackUrl: ROUTES.PUBLIC.HOME });
-    },
   },
   {
     id: "discord",
     icon: <DiscordIcon className="mr-3 h-4 w-4 drop-shadow-primary-lg" />,
-    onClick: () => {
-      void signIn("discord", { callbackUrl: ROUTES.PUBLIC.HOME });
-    },
   },
 ];
 
 export default function SignInPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   useEffect(() => {
     router.prefetch(ROUTES.AUTH.SIGNIN_EMAIL);
   });
 
+  const handleSignInProviderClick = (providerId: string) => {
+    return (e: MouseEvent<HTMLButtonElement>) => {
+      e.preventDefault();
+      void signIn(providerId, { callbackUrl: searchParams.get("from") ?? ROUTES.PUBLIC.HOME });
+    }
+  }
+
   const handleSignInEmailClick: MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
-    router.push(ROUTES.AUTH.SIGNIN_EMAIL);
+    router.push(`${ROUTES.AUTH.SIGNIN_EMAIL}?${searchParams.toString()}`);
   };
 
   return (
@@ -64,7 +62,7 @@ export default function SignInPage() {
           <Button
             key={provider.id}
             variant="secondary"
-            onClick={provider.onClick}
+            onClick={handleSignInProviderClick(provider.id)}
           >
             {provider.icon}
             Sign in with{" "}
@@ -79,7 +77,7 @@ export default function SignInPage() {
       <div className="text-sm uppercase text-primary/80 text-shadow-primary-lg">
         Don&apos;t have an account?{" "}
         <Link
-          href={ROUTES.AUTH.SIGNUP}
+          href={`${ROUTES.AUTH.SIGNUP}?${searchParams.toString()}`}
           className="font-medium text-primary hover:underline"
         >
           Sign up
