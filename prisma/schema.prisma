@@ -84,7 +84,7 @@ model VerificationToken {
 model ThreatSignature {
     id          String @id @default(cuid())
     name        String @db.VarChar(255)
-    description String @db.VarChar(255) //potential threats
+    description String @db.VarChar(255) //potential attacks
     pattern     String @db.VarChar(255)
     //severity
     weight      Int    @default(1) //weight of the threat

@@ -2,99 +2,99 @@ import { PrismaClient, type ThreatSignature } from "@prisma/client";
 
 const threatSignatures: Omit<ThreatSignature, "id">[] = [
   {
-    name: "indexOf", // String.prototype.indexOf()
+    name: "String.prototype.indexOf()", // String.prototype.indexOf()
     pattern: "\\.indexOf\\(.*\\)", // double \ for correct seeding
-    description: "test",
+    description: "code injection",
     weight: 1,
   },
   {
-    name: "charAt", // String.prototype.charAt()
+    name: "String.prototype.charAt()", // String.prototype.charAt()
     pattern: "\\.charAt\\(.*\\)",
-    description: "test",
+    description: "code injection",
     weight: 1,
   },
   {
-    name: "split", // String.prototype.split()
+    name: "String.prototype.split()", // String.prototype.split()
     pattern: "\\.split\\(.*\\)",
-    description: "test",
+    description: "code injection",
     weight: 1,
   },
   {
-    name: "String.fromCharCode", // String.fromCharCode()
+    name: "String.fromCharCode()", // String.fromCharCode()
     pattern: "String\\.fromCharCode\\(.*\\)",
-    description: "test",
+    description: "code injection",
     weight: 1,
   },
   {
-    name: "String.charCodeAt", // String.charCodeAt()
+    name: "String.charCodeAt()", // String.charCodeAt()
     pattern: "String\\.charCodeAt\\(.*\\)",
-    description: "test",
+    description: "code injection",
     weight: 1,
   },
   {
-    name: "eval", // eval()
+    name: "eval()", // eval()
     pattern: "eval\\(.*\\)",
-    description: "test",
+    description: "cross-site scripting (XSS) attacks",
     weight: 5,
   },
   {
-    name: "setTimeout", // setTimeout()
+    name: "setTimeout()", // setTimeout()
     pattern: "setTimeout\\(.*\\)",
-    description: "test",
+    description: "denial of service (DoS) attacks, clickjacking attacks",
     weight: 2,
   },
   {
-    name: "setInterval", // setInterval()
+    name: "setInterval()", // setInterval()
     pattern: "setInterval\\(.*\\)",
-    description: "test",
+    description: "denial of service (DoS) attacks, clickjacking attacks",
     weight: 2,
   },
   {
-    name: "document.write", // document.write()
+    name: "document.write()", // document.write()
     pattern: "document\\.write\\(.*\\)",
-    description: "test",
+    description: "cross-site scripting (XSS) attacks",
     weight: 4,
   },
   {
-    name: "document.writeln", // document.writeln()
+    name: "document.writeln()", // document.writeln()
     pattern: "document\\.writeln\\(.*\\)",
-    description: "test",
+    description: "cross-site scripting (XSS) attacks",
     weight: 4,
   },
   {
-    name: "appendChild", // element.appendChild()
+    name: "element.appendChild()", // element.appendChild()
     pattern: "\\.appendChild\\(.*\\)",
-    description: "test",
+    description: "cross-site scripting (XSS) attacks",
     weight: 2,
   },
   {
-    name: "innerHTML", // element.innerHTML
+    name: "element.innerHTML", // element.innerHTML
     pattern: "\\.innerHTML\\s*=",
-    description: "test",
+    description: "cross-site scripting (XSS) attacks",
     weight: 4,
   },
   {
-    name: "location.assign", // location.assign()
+    name: "location.assign()", // location.assign()
     pattern: "location\\.assign\\(.*\\)",
-    description: "test",
+    description: "open redirection attacks, phishing attacks, session fixation attacks",
     weight: 4,
   },
   {
-    name: "location.replace", // location.replace()
+    name: "location.replace()", // location.replace()
     pattern: "location\\.replace\\(.*\\)",
-    description: "test",
+    description: "open redirection attacks, phishing attacks, session fixation attacks",
     weight: 4,
   },
   {
-    name: "unescape", // unescape()
+    name: "unescape()", // unescape()
     pattern: "unescape\\(.*\\)",
-    description: "test",
+    description: "cross-site scripting (XSS) attacks",
     weight: 5,
   },
   {
     name: "XMLHttpRequest", // XMLHttpRequest
     pattern: "XMLHttpRequest\\(.*\\)",
-    description: "test",
+    description: "cross-site request forgery (CSRF) attacks",
     weight: 3,
   },
 ];
