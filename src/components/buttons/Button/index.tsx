@@ -20,8 +20,6 @@ const Button = ({
 };
 
 export default Button;
-// box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px; shadow-[0px_2px_4px_0px,0px_2px_16px_0px]
-// box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 
 const PrimaryButton = ({
   className,
@@ -56,10 +54,10 @@ const SecondaryButton = ({
 }: Omit<ButtonProps, "variant">) => {
   return (
     <button
-      className={cn(
-        "text-shadow-primary-lg flex h-[40px] w-full items-center justify-center border border-primary/30 bg-primary/10 px-6 py-2  font-medium uppercase  text-primary shadow-[0px_0px_7px_1px] shadow-primary/10 transition hover:border-primary/100 hover:bg-primary/20  hover:shadow-primary/30 active:bg-primary/70 active:text-secondary",
+      className={`text-shadow-primary-lg  ${cn(
+        "flex h-[40px] w-full items-center justify-center border border-primary/30 bg-primary/10 px-6 py-2  font-medium uppercase  text-primary shadow-[0px_0px_7px_1px] shadow-primary/10 transition hover:border-primary/100 hover:bg-primary/20  hover:shadow-primary/30 active:bg-primary/70 active:text-secondary",
         className,
-      )}
+      )}`}
       {...rest}
     >
       {children}

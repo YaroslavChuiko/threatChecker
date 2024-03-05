@@ -41,10 +41,10 @@ const SecondaryLinkButton = ({
 }: ComponentProps<typeof Link>) => {
   return (
     <Link
-      className={cn(
+      className={`text-shadow-primary-lg ${cn(
         "flex h-[40px] w-full items-center justify-center border border-primary/30 bg-primary/10 px-6 py-2 font-medium  uppercase text-primary  transition hover:border-primary/100 hover:bg-primary/20 active:bg-primary/70 active:text-secondary",
         className,
-      )}
+      )}`}
       {...rest}
     >
       {children}
