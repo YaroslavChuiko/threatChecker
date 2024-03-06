@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   Accordion,
@@ -5,6 +6,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/Accordion";
+import ChevronLeftIcon from "~/components/icons/ChevronLeftIcon";
+import { ROUTES } from "~/routes";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import SecurityRiskStatusSection from "./SecurityRiskStatusSection";
@@ -43,22 +46,33 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
               NC 382 248 40270 454540 9987
             </div>
           </div>
-          <div className="flex flex-col items-start border border-primary bg-primary/5 pb-8 pt-8 shadow-[0px_0px_5px_2px] shadow-primary/20">
+          <div className="flex flex-col items-start border border-primary bg-primary/5 pb-8 pt-7 shadow-[0px_0px_5px_2px] shadow-primary/20">
             <div className="mb-5 w-full px-6">
-              <h2 className="text-shadow-primary-lg mb-5 w-full truncate text-lg  font-medium leading-none">
-                {query}
-              </h2>
+              <div className="mb-4 flex items-center gap-1">
+                <Link
+                  href={ROUTES.PUBLIC.HOME}
+                  className="leading-none text-primary drop-shadow-primary-lg"
+                >
+                  <ChevronLeftIcon className="h-[26px] w-[26px]" />
+                </Link>
+                <h2 className="w-full truncate text-lg font-medium  leading-none drop-shadow-primary-lg">
+                  {query}
+                </h2>
+              </div>
               <div className="w-full border-b border-primary/30 pr-3" />
             </div>
 
-            <div className="pl-6 pr-2 w-full">
-              <div className="max-h-[550px] overflow-y-auto w-full">
+            <div className="w-full pl-6 pr-2">
+              <div className="max-h-[550px] w-full overflow-y-auto">
+                <SecurityRiskStatusSection
+                  securityRiskCoef={data.securityRiskCoef}
+                  possibleAttacks={data.possibleAttacks}
+                  session={session}
+                />
 
-                <SecurityRiskStatusSection securityRiskCoef={data.securityRiskCoef} possibleAttacks={data.possibleAttacks} session={session} /> 
+                <div className="my-5 mr-4 border-b-[1px] border-primary/30" />
 
-                <div className="my-5 border-b-[1px] border-primary/30 mr-4" />
-
-                <div className="mb-7 pl-4 pr-8 pt-2 text-shadow-primary-lg">
+                <div className="text-shadow-primary-lg mb-7 pl-4 pr-8 pt-2">
                   <div className="mb-3 text-sm">
                     <span className="text-base font-medium uppercase">
                       URL Address:{" "}
