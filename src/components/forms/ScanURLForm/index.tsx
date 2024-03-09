@@ -21,7 +21,11 @@ const ScanUrlSchema = z.object({
     .trim()
     .url({
       message: errorMessages,
-    }),
+    })
+    .startsWith(
+      "http",
+      "Please enter URL that starts with http:// or https://",
+    ),
 });
 //!! mb update url validation to allow only http and https
 
