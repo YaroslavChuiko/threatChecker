@@ -11,6 +11,7 @@ import { ROUTES } from "~/routes";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import SecurityRiskStatusSection from "./SecurityRiskStatusSection";
+import { formatBytes } from "~/utils/formatBytes";
 
 type Props = {
   searchParams: {
@@ -24,11 +25,20 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
   }
 
   const session = await getServerAuthSession();
-  const data = await api.analyze.scan.mutate({ url: query });
+  const result = await api.analysis.scanUrl.mutate({ url: query });
 
-  if (!data) {
-    notFound();
+  if (result.status === 'error') {
+    return <div>{result.error.message}</div>;
   }
+
+  const {
+    blacklistsAnalysis,
+    foundLinks,
+    possibleAttacks,
+    referencedScriptLinks,
+    securityRiskCoef,
+    siteDetails,
+  } = result.data;
 
   // await new Promise((resolve) => {
   //   setTimeout(resolve, 5000);
@@ -63,53 +73,97 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
             </div>
 
             <div className="w-full pl-6 pr-2">
-              <div className="max-h-[550px] w-full overflow-y-auto">
+              <div className="max-h-[550px] w-full overflow-y-auto overflow-x-hidden">
                 <SecurityRiskStatusSection
-                  securityRiskCoef={data.securityRiskCoef}
-                  possibleAttacks={data.possibleAttacks}
+                  securityRiskCoef={securityRiskCoef}
+                  possibleAttacks={possibleAttacks}
                   session={session}
                 />
 
                 <div className="my-5 mr-4 border-b-[1px] border-primary/30" />
 
-                <div className="text-shadow-primary-lg mb-7 pl-4 pr-8 pt-2">
+                <div className="text-shadow-primary-lg mb-5 pl-4 pr-8 pt-2">
                   <div className="mb-3 text-sm">
                     <span className="text-base font-medium uppercase">
                       URL Address:{" "}
                     </span>
                     {query}
                   </div>
-                  <div className="mb-5 grid grid-cols-2 gap-x-5 gap-y-3">
-                    <div className=" text-base">
-                      <span className="text-base font-medium uppercase">
-                        IP Address:{" "}
-                      </span>
-                      151.101.1.197
-                    </div>
-                    <div className="text-base">
-                      <span className="text-base font-medium uppercase">
-                        Hosting:{" "}
-                      </span>
-                      N/A
-                    </div>
-                    <div className=" text-base">
-                      <span className="text-base font-medium uppercase">
-                        Server:{" "}
-                      </span>
-                      N/A
-                    </div>
-                    <div className=" text-base">
-                      <span className="text-base font-medium uppercase">
-                        CMS:{" "}
-                      </span>
-                      N/A
-                    </div>
-                    <div className=" text-base">
-                      <span className="text-base font-medium uppercase">
-                        Powered by:{" "}
-                      </span>
-                      N/A
-                    </div>
+                  <div className="mb-3 text-lg font-medium uppercase">
+                    <span className="text-base font-medium uppercase">
+                      Blacklists:{" "}
+                    </span>
+                    {blacklistsAnalysis.stats.malicious}/
+                    {Object.values(blacklistsAnalysis.stats).reduce(
+                      (acc, curr) => acc + curr,
+                      0,
+                    )}
+                  </div>
+                  <div>
+                    {blacklistsAnalysis.stats.malicious || "No"} security
+                    vendors flagged this URL as malicious
+                  </div>
+                </div>
+                <Accordion className="pr-4" type="single" collapsible>
+                  <AccordionItem value="item-1">
+                    <AccordionTrigger>details</AccordionTrigger>
+                    <AccordionContent className="max-h-[250px] overflow-y-auto">
+                      {blacklistsAnalysis.results.length
+                        ? blacklistsAnalysis.results.map(
+                            ([vendorName, results]) => (
+                              <p key={vendorName}>
+                                <span className="font-medium">
+                                  {vendorName}:
+                                </span>{" "}
+                                {results.result}
+                              </p>
+                            ),
+                          )
+                        : "No vendors found"}
+                    </AccordionContent>
+                  </AccordionItem>
+                </Accordion>
+
+                <div className="my-5 mr-4 border-b-[1px] border-primary/30" />
+
+                <div className="text-shadow-primary-lg mb-7 space-y-3 pl-4 pr-8 pt-2">
+                  <div className="text-base">
+                    <span className="text-base font-medium uppercase">
+                      Title:{" "}
+                    </span>
+                    {siteDetails.title || "N/A"}
+                  </div>
+                  <div className="text-base">
+                    <span className="text-base font-medium uppercase">
+                      content type:{" "}
+                    </span>
+                    {siteDetails.contentType ?? "N/A"}
+                  </div>
+                  <div className="text-base">
+                    <span className="text-base font-medium uppercase">
+                      Status:{" "}
+                    </span>
+                    200
+                  </div>
+                  <div className="text-base">
+                    <span className="text-base font-medium uppercase">
+                      connection:{" "}
+                    </span>
+                    {siteDetails.connection ?? "N/A"}
+                  </div>
+                  <div className=" text-base">
+                    <span className="text-base font-medium uppercase">
+                      Server:{" "}
+                    </span>
+                    {siteDetails.server ?? "N/A"}
+                  </div>
+                  <div className=" text-base">
+                    <span className="text-base font-medium uppercase">
+                      Body Length:{" "}
+                    </span>
+                    {siteDetails.contentLength
+                      ? formatBytes(siteDetails.contentLength)
+                      : "N/A"}
                   </div>
                 </div>
 
@@ -117,19 +171,17 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
                   <AccordionItem value="item-1">
                     <AccordionTrigger>Links found</AccordionTrigger>
                     <AccordionContent className="max-h-[250px] overflow-y-auto">
-                      {data.foundLinks.length
-                        ? data.foundLinks.map((link) => (
-                            <p key={link}>{link}</p>
-                          ))
+                      {foundLinks.length
+                        ? foundLinks.map((link, i) => <p key={i}>{link}</p>)
                         : "No links found"}
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="item-2">
                     <AccordionTrigger>JavaScript included</AccordionTrigger>
                     <AccordionContent className="max-h-[250px] overflow-y-auto">
-                      {data.referencedScriptLinks.length
-                        ? data.referencedScriptLinks.map((link) => (
-                            <p key={link}>{link}</p>
+                      {referencedScriptLinks.length
+                        ? referencedScriptLinks.map((link, i) => (
+                            <p key={i}>{link}</p>
                           ))
                         : "No JavaScript included"}
                     </AccordionContent>
