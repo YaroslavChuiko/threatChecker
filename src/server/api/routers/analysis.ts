@@ -1,103 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { z } from "zod";
-import * as cheerio from "cheerio";
-import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 import { type ThreatSignature } from "@prisma/client";
-import crypto from "crypto";
 import { TRPCError } from "@trpc/server";
 import { getHTTPStatusCodeFromError } from "@trpc/server/http";
-import { env } from "~/env";
 import async from "async";
-
-type VirusTotalUrlInfoResponse = {
-  error?: {
-    code: string;
-    message: string;
-  };
-  data: {
-    id: string;
-    type: string;
-    attributes: {
-      last_analysis_stats: {
-        harmless: number;
-        malicious: number;
-        suspicious: number;
-        timeout: number;
-        undetected: number;
-      };
-      last_analysis_results: Record<
-        string,
-        {
-          category: string;
-          result: string;
-          method: string;
-          engine_name: string;
-        }
-      >;
-      trackers: string[];
-      html_meta: {
-        description: string;
-        title: string;
-        og: {
-          description: string;
-          title: string;
-          type: string;
-          url: string;
-        };
-        twitter: {
-          description: string;
-          title: string;
-          type: string;
-          url: string;
-        };
-      };
-      tags: string[];
-      last_http_response_headers: Record<string, string>;
-      last_http_response_content_sha256: string;
-      categories: string[];
-      last_http_response_code: number;
-      last_http_response_content_length: number;
-      last_http_response_content_hash: string;
-      last_http_response_date: string;
-      title: string;
-      url: string;
-    };
-  };
-};
-
-type VirusTotalScanUrlResponse = {
-  data: {
-    type: string;
-    id: string;
-    links: {
-      self: string;
-    };
-  };
-};
-
-type VirusTotalAnalysisResponse = {
-  data: {
-    type: string;
-    id: string;
-    links: {
-      self: string;
-      item: string;
-    };
-    attributes: {
-      date: number;
-      status: string;
-      results: VirusTotalUrlInfoResponse["data"]["attributes"]["last_analysis_results"];
-      stats: VirusTotalUrlInfoResponse["data"]["attributes"]["last_analysis_stats"];
-    };
-    meta: {
-      url_info: {
-        id: string;
-        url: string;
-      };
-    };
-  };
-};
+import * as cheerio from "cheerio";
+import crypto from "crypto";
+import { z } from "zod";
+import { env } from "~/env";
+import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { type VirusTotalAnalysisResponse, type VirusTotalScanUrlResponse, type VirusTotalUrlInfoResponse } from "~/types/virusTotal";
 
 type ScanUrlResponse =
   | {
@@ -140,6 +52,9 @@ type ScanUrlResponse =
       };
     };
 
+const INTERNAL_SERVER_ERROR_MSG =
+  "An unexpected error occurred, please try again later.";
+
 export const analysisRouter = createTRPCRouter({
   scanUrl: publicProcedure
     .input(z.object({ url: z.string().url({ message: "Invalid url" }) }))
@@ -157,48 +72,6 @@ export const analysisRouter = createTRPCRouter({
         );
 
         const result = scanScript(scriptsToScan.join("\n"), threatSignatures);
-
-        // const virusTotalScanURL = await fetch(
-        //   `https://www.virustotal.com/api/v3/urls`,
-        //   {
-        //     method: "POST",
-        //     headers: {
-        //       Accept: "application/json",
-        //       "Content-Type": "application/x-www-form-urlencoded",
-        //       "x-apikey": env.VIRUS_TOTAL_API_KEY,
-        //     },
-        //     body: new URLSearchParams({ url: input.url }),
-        //   },
-        // ).catch((error) => {
-        //   throw new TRPCError({
-        //     code: "INTERNAL_SERVER_ERROR",
-        //     message: "An unexpected error occurred, please try again later.",
-        //     cause: error,
-        //   });
-        // });
-        // console.log(await virusTotalScanURL.json());
-
-        // const virusTotalURL = await fetch(
-        //   `https://www.virustotal.com/api/v3/urls/${crypto
-        //     .createHash("sha256")
-        //     .update(input.url)
-        //     .digest("hex")}`,
-        //   {
-        //     method: "GET",
-        //     headers: {
-        //       "x-apikey": env.VIRUS_TOTAL_API_KEY,
-        //     },
-        //   },
-        // ).catch((error) => {
-        //   throw new TRPCError({
-        //     code: "INTERNAL_SERVER_ERROR",
-        //     message: "An unexpected error occurred, please try again later.",
-        //     cause: error,
-        //   });
-        // });
-
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        // const virusTotalResult: VirusTotalResponse = await virusTotalURL.json();
 
         const { blacklistsAnalysis, siteDetails } = await virusTotalAnalysis(
           input.url,
@@ -354,32 +227,67 @@ const scanScript = <T extends ThreatSignature>(
 };
 
 const virusTotalAnalysis = async (url: string) => {
-  const errorMessage = "An unexpected error occurred, please try again later.";
+  let urlInfo;
 
-  //!! now every on request virusTotal scan url, to do it faster we can coll this code first and in it failed(no previous analyses) then call the second one
-  // const urlInfo = await fetch(
-  //   `https://www.virustotal.com/api/v3/urls/${crypto
-  //     .createHash("sha256")
-  //     .update(url)
-  //     .digest("hex")}`,
-  //   {
-  //     method: "GET",
-  //     headers: {
-  //       "x-apikey": env.VIRUS_TOTAL_API_KEY,
-  //     },
-  //   },
-  // ).catch((error) => {
-  //   throw new TRPCError({
-  //     code: "BAD_REQUEST",
-  //     message: "Your scan request is being processed, please try again in few seconds.",
-  //     cause: error,
-  //   });
-  // });
+  urlInfo = await getUrlAnalysis(url);
 
-  //   const urlInfoResult: VirusTotalUrlInfoResponse = await urlInfo.json();
+  if (urlInfo.error) {
+    urlInfo = await analyzeUrl(url);
+  }
 
-  // console.log("virusTotalResult", urlInfoResult);
+  if (urlInfo.error) {
+    throw new TRPCError({
+      code: "INTERNAL_SERVER_ERROR",
+      message: INTERNAL_SERVER_ERROR_MSG,
+    });
+  }
 
+  return {
+    blacklistsAnalysis: {
+      stats: urlInfo.data.attributes?.last_analysis_stats,
+      results: Object.entries(urlInfo.data.attributes?.last_analysis_results),
+    },
+    siteDetails: {
+      title: urlInfo.data.attributes?.title,
+      url: urlInfo.data.attributes?.url,
+      server: urlInfo.data.attributes?.last_http_response_headers?.server,
+      contentType:
+        urlInfo.data.attributes?.last_http_response_headers?.["content-type"],
+      contentLength: urlInfo.data.attributes?.last_http_response_content_length,
+      connection:
+        urlInfo.data.attributes?.last_http_response_headers?.Connection,
+    },
+  };
+};
+
+const getUrlAnalysis = async (url: string) => {
+  const urlInfo = await fetch(
+    `https://www.virustotal.com/api/v3/urls/${crypto
+      .createHash("sha256")
+      .update(url)
+      .digest("hex")}`,
+    {
+      method: "GET",
+      headers: {
+        "x-apikey": env.VIRUS_TOTAL_API_KEY,
+      },
+    },
+  ).catch((error) => {
+    throw new TRPCError({
+      code: "BAD_REQUEST",
+      message:
+        "Your scan request is being processed, please try again in few seconds.",
+      cause: error,
+    });
+  });
+
+  const urlInfoResult: VirusTotalUrlInfoResponse = await urlInfo.json();
+  console.log("virusTotalResult", urlInfoResult);
+
+  return urlInfoResult;
+};
+
+const analyzeUrl = async (url: string) => {
   const scanURL = await fetch(`https://www.virustotal.com/api/v3/urls`, {
     method: "POST",
     headers: {
@@ -391,18 +299,16 @@ const virusTotalAnalysis = async (url: string) => {
   }).catch((error) => {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
-      message: errorMessage,
+      message: INTERNAL_SERVER_ERROR_MSG,
       cause: error,
     });
   });
 
   const scanURLResult: VirusTotalScanUrlResponse = await scanURL.json();
-
   console.log(scanURLResult);
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
   const urlAnalysisResult: VirusTotalAnalysisResponse = await async.retry(
-    { times: 10, interval: 2000 },
+    { times: 5, interval: 4000 },
     async () => {
       const urlAnalysis = await fetch(scanURLResult.data.links.self, {
         method: "GET",
@@ -412,7 +318,7 @@ const virusTotalAnalysis = async (url: string) => {
       }).catch((error) => {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: errorMessage,
+          message: INTERNAL_SERVER_ERROR_MSG,
           cause: error,
         });
       });
@@ -423,7 +329,7 @@ const virusTotalAnalysis = async (url: string) => {
       if (urlInfoResult.data.attributes.status !== "completed") {
         throw new TRPCError({
           code: "INTERNAL_SERVER_ERROR",
-          message: errorMessage,
+          message: INTERNAL_SERVER_ERROR_MSG,
         });
       }
 
@@ -441,7 +347,7 @@ const virusTotalAnalysis = async (url: string) => {
   }).catch((error) => {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
-      message: errorMessage,
+      message: INTERNAL_SERVER_ERROR_MSG,
       cause: error,
     });
   });
@@ -467,25 +373,5 @@ const virusTotalAnalysis = async (url: string) => {
   // );
   // console.log("categories:", urlAnalysisResult.data.attributes.categories);
 
-  return {
-    blacklistsAnalysis: {
-      stats: urlInfoResult.data.attributes?.last_analysis_stats,
-      results: Object.entries(
-        urlInfoResult.data.attributes?.last_analysis_results,
-      ),
-    },
-    siteDetails: {
-      title: urlInfoResult.data.attributes?.title,
-      url: urlInfoResult.data.attributes?.url,
-      server: urlInfoResult.data.attributes?.last_http_response_headers?.server,
-      contentType:
-        urlInfoResult.data.attributes?.last_http_response_headers?.[
-          "content-type"
-        ],
-      contentLength:
-        urlInfoResult.data.attributes?.last_http_response_content_length,
-      connection:
-        urlInfoResult.data.attributes?.last_http_response_headers?.Connection,
-    },
-  };
+  return urlInfoResult;
 };
