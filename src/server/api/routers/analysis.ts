@@ -9,48 +9,12 @@ import crypto from "crypto";
 import { z } from "zod";
 import { env } from "~/env";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { type VirusTotalAnalysisResponse, type VirusTotalScanUrlResponse, type VirusTotalUrlInfoResponse } from "~/types/virusTotal";
-
-type ScanUrlResponse =
-  | {
-      status: "success";
-      data: {
-        referencedScriptLinks: string[];
-        foundLinks: string[];
-        securityRiskCoef: number;
-        possibleAttacks: string[];
-        blacklistsAnalysis: {
-          stats: VirusTotalUrlInfoResponse["data"]["attributes"]["last_analysis_stats"];
-          results: [
-            string,
-            {
-              category: string;
-              result: string;
-              method: string;
-              engine_name: string;
-            },
-          ][];
-        };
-        siteDetails: {
-          title: string;
-          url: string;
-          server: string | undefined;
-          contentType: string | undefined;
-          contentLength: number;
-          connection: string | undefined;
-        };
-      };
-    }
-  | {
-      status: "error";
-      error: {
-        message: string;
-        data: {
-          code: string;
-          httpStatus: number;
-        };
-      };
-    };
+import { type ScanUrlResponse } from "~/types/analysis";
+import {
+  type VirusTotalAnalysisResponse,
+  type VirusTotalScanUrlResponse,
+  type VirusTotalUrlInfoResponse,
+} from "~/types/virusTotal";
 
 const INTERNAL_SERVER_ERROR_MSG =
   "An unexpected error occurred, please try again later.";
@@ -68,7 +32,9 @@ export const analysisRouter = createTRPCRouter({
         console.log("scriptsToScan.length", scriptsToScan.length);
 
         const threatSignatures = calculateRelativeWeights(
-          await ctx.db.threatSignature.findMany(),
+          await ctx.db.threatSignature.findMany({
+            include: { threatDetails: true },
+          }),
         );
 
         const result = scanScript(scriptsToScan.join("\n"), threatSignatures);
@@ -77,31 +43,46 @@ export const analysisRouter = createTRPCRouter({
           input.url,
         );
 
-        console.log(`${result.size} of ${threatSignatures.length}`);
+        console.log(`${result.length} of ${threatSignatures.length}`);
         console.log(
           "relativeWeight",
-          Array.from(result.values()).reduce(
-            (acc, item) => acc + item.relativeWeight,
-            0,
-          ),
+          result.reduce((acc, item) => acc + item.relativeWeight, 0),
         );
         console.log(result);
 
         const possibleAttacks = new Set<string>(
-          Array.from(result.values()).map((item) => item.description),
+          result
+            .map(({ threatDetails }) =>
+              Array.isArray(threatDetails)
+                ? threatDetails.map((td) => td.name)
+                : [],
+            )
+            .flat(2),
         );
 
         console.log("possibleAttacks", possibleAttacks);
+
+        const securityRiskCoef = result.reduce(
+          (acc, item) => acc + item.relativeWeight,
+          0,
+        );
+
+        await ctx.db.scanHistory.create({
+          data: {
+            url: input.url,
+            securityRiskCoef,
+            threatSignatures: {
+              connect: result.map((item) => ({ id: item.id })),
+            },
+          },
+        });
 
         return {
           status: "success",
           data: {
             referencedScriptLinks,
             foundLinks,
-            securityRiskCoef: Array.from(result.values()).reduce(
-              (acc, item) => acc + item.relativeWeight,
-              0,
-            ),
+            securityRiskCoef,
             possibleAttacks: Array.from(possibleAttacks),
             blacklistsAnalysis,
             siteDetails,
@@ -198,7 +179,14 @@ const downloadScripts = async (scriptURLList: string[]) => {
   return downloadedScripts;
 };
 
-const calculateRelativeWeights = (signatures: ThreatSignature[]) => {
+const calculateRelativeWeights = (
+  signatures: (ThreatSignature & {
+    threatDetails: {
+      id: string;
+      name: string;
+    }[];
+  })[],
+) => {
   const weightSum = signatures.reduce((acc, item) => acc + item.weight, 0);
 
   return signatures.map((item) => ({
@@ -223,7 +211,7 @@ const scanScript = <T extends ThreatSignature>(
     }
   });
 
-  return result;
+  return Array.from(result.values());
 };
 
 const virusTotalAnalysis = async (url: string) => {
