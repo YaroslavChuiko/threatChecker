@@ -1,107 +1,176 @@
-import { PrismaClient, type ThreatSignature } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
 
-const threatSignatures: Omit<ThreatSignature, "id">[] = [
+const threatSignatures = [
   {
     name: "String.prototype.indexOf()", // String.prototype.indexOf()
     pattern: "\\.indexOf\\(.*\\)", // double \ for correct seeding
-    description: "code injection",
     weight: 1,
+    threatDetails: {
+      connect: [{ name: "code injection" } ]
+    },
   },
   {
     name: "String.prototype.charAt()", // String.prototype.charAt()
     pattern: "\\.charAt\\(.*\\)",
-    description: "code injection",
     weight: 1,
+    threatDetails: {
+      connect: [{ name: "code injection" } ]
+    },
   },
   {
     name: "String.prototype.split()", // String.prototype.split()
     pattern: "\\.split\\(.*\\)",
-    description: "code injection",
     weight: 1,
+    threatDetails: {
+      connect: [{ name: "code injection" } ]
+    },
   },
   {
     name: "String.fromCharCode()", // String.fromCharCode()
     pattern: "String\\.fromCharCode\\(.*\\)",
-    description: "code injection",
     weight: 1,
+    threatDetails: {
+      connect: [{ name: "code injection" } ]
+    },
   },
   {
     name: "String.charCodeAt()", // String.charCodeAt()
     pattern: "String\\.charCodeAt\\(.*\\)",
-    description: "code injection",
     weight: 1,
+    threatDetails: {
+      connect: [{ name: "code injection" } ]
+    },
   },
   {
     name: "eval()", // eval()
     pattern: "eval\\(.*\\)",
-    description: "cross-site scripting (XSS) attacks",
     weight: 5,
+    threatDetails: {
+      connect: [{ name: "cross-site scripting (XSS)" } ]
+    },
   },
   {
     name: "setTimeout()", // setTimeout()
     pattern: "setTimeout\\(.*\\)",
-    description: "denial of service (DoS) attacks, clickjacking attacks",
     weight: 2,
+    threatDetails: {
+      connect: [{ name: "denial of service (DoS)" }, { name: "clickjacking" }]
+    },
   },
   {
     name: "setInterval()", // setInterval()
     pattern: "setInterval\\(.*\\)",
-    description: "denial of service (DoS) attacks, clickjacking attacks",
     weight: 2,
+    threatDetails: {
+      connect: [{ name: "denial of service (DoS)" }, { name: "clickjacking" }]
+    },
   },
   {
     name: "document.write()", // document.write()
     pattern: "document\\.write\\(.*\\)",
-    description: "cross-site scripting (XSS) attacks",
     weight: 4,
+    threatDetails: {
+      connect: [{ name: "cross-site scripting (XSS)" }]
+    },
   },
   {
     name: "document.writeln()", // document.writeln()
     pattern: "document\\.writeln\\(.*\\)",
-    description: "cross-site scripting (XSS) attacks",
     weight: 4,
+    threatDetails: {
+      connect: [{ name: "cross-site scripting (XSS)" }]
+    },
   },
   {
     name: "element.appendChild()", // element.appendChild()
     pattern: "\\.appendChild\\(.*\\)",
-    description: "cross-site scripting (XSS) attacks",
     weight: 2,
+    threatDetails: {
+      connect: [{ name: "cross-site scripting (XSS)" }]
+    },
   },
   {
     name: "element.innerHTML", // element.innerHTML
     pattern: "\\.innerHTML\\s*=",
-    description: "cross-site scripting (XSS) attacks",
     weight: 4,
+    threatDetails: {
+      connect: [{ name: "cross-site scripting (XSS)" }]
+    },
   },
   {
     name: "location.assign()", // location.assign()
     pattern: "location\\.assign\\(.*\\)",
-    description: "open redirection attacks, phishing attacks, session fixation attacks",
     weight: 4,
+    threatDetails: {
+      connect: [{ name: "open redirection" }, { name: "phishing" }, { name: "session fixation" }]
+    },
   },
   {
     name: "location.replace()", // location.replace()
     pattern: "location\\.replace\\(.*\\)",
-    description: "open redirection attacks, phishing attacks, session fixation attacks",
     weight: 4,
+    threatDetails: {
+      connect: [{ name: "open redirection" }, { name: "phishing" }, { name: "session fixation" }]
+    },
   },
   {
     name: "unescape()", // unescape()
     pattern: "unescape\\(.*\\)",
-    description: "cross-site scripting (XSS) attacks",
     weight: 5,
+    threatDetails: {
+      connect: [{ name: "cross-site scripting (XSS)" }]
+    },
   },
   {
     name: "XMLHttpRequest", // XMLHttpRequest
     pattern: "XMLHttpRequest\\(.*\\)",
-    description: "cross-site request forgery (CSRF) attacks",
     weight: 3,
+    threatDetails: {
+      connect: [{ name: "cross-site request forgery (CSRF)" }]
+    },
+  },
+];
+
+const threatDetails = [
+  {
+    name: "code injection",
+  },
+  {
+    name: "cross-site scripting (XSS)",
+  },
+  {
+    name: "denial of service (DoS)",
+  },
+  {
+    name: "clickjacking",
+  },
+  {
+    name: "open redirection",
+  },
+  {
+    name: "phishing",
+  },
+  {
+    name: "session fixation",
+  },
+  {
+    name: "cross-site request forgery (CSRF)",
   },
 ];
 
 const prisma = new PrismaClient();
 
 async function main() {
+  await Promise.all(
+    threatDetails.map(async (threatDetails) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
+      await prisma.threatDetails.create({
+        data: threatDetails,
+      });
+    }),
+  );
+  console.log({ threatDetails });
+
   await Promise.all(
     threatSignatures.map(async (threatSignature) => {
       // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
