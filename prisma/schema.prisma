@@ -79,13 +79,28 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-// threat signature
-// Malware Signature
 model ThreatSignature {
-    id          String @id @default(cuid())
-    name        String @db.VarChar(255)
-    description String @db.VarChar(255) //potential attacks
-    pattern     String @db.VarChar(255)
-    //severity
-    weight      Int    @default(1) //weight of the threat
+    id      String @id @default(cuid())
+    name    String @db.VarChar(255)
+    pattern String @db.VarChar(255)
+    weight  Int    @default(1)
+
+    scanHistory   ScanHistory[]
+    threatDetails ThreatDetails[]
+}
+
+model ThreatDetails {
+    id   String @id @default(cuid())
+    name String @unique @db.VarChar(255)
+
+    threatSignatures ThreatSignature[]
+}
+
+model ScanHistory {
+    id               String   @id @default(cuid())
+    url              String   @db.VarChar(255)
+    scanDate         DateTime @default(now())
+    securityRiskCoef Float    @db.DoublePrecision
+
+    threatSignatures ThreatSignature[]
 }
