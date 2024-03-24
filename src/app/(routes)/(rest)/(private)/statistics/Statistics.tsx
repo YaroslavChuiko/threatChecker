@@ -14,6 +14,7 @@ import {
 } from "chart.js";
 import { type ComponentProps } from "react";
 import { Bar, Doughnut } from "react-chartjs-2";
+import { format, sub } from "date-fns";
 
 ChartJS.register(
   CategoryScale,
@@ -34,32 +35,22 @@ export const options: ComponentProps<typeof Bar>["options"] = {
     },
     title: {
       display: true,
-      text: "Sites scanned by month",
+      text: "Sites scanned by last 20 days",
     },
   },
 };
 
-const labels = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
-];
+const labels = [];
+for (let i = 20; i > 0; i--) {
+  labels.push(format(sub(new Date(), { days: i }), "dd/MM"));
+}
 
 export const data: ChartData<"bar", number[], string> = {
   labels,
   datasets: [
     {
       label: "Sites scanned",
-      data: labels.map(() => Math.floor(Math.random() * 1000)),
+      data: labels.map(() => Math.floor(Math.random() * 20)),
       backgroundColor: "rgba(169, 215, 164, 0.3)",
       borderColor: "rgba(169, 215, 164, 1)",
       // borderRadius: 5,
@@ -70,7 +61,7 @@ export const data: ChartData<"bar", number[], string> = {
     },
     {
       label: "High risk sites",
-      data: labels.map(() => Math.floor(Math.random() * 1000)),
+      data: labels.map(() => Math.floor(Math.random() * 20)),
       backgroundColor: "rgba(255, 56, 69, 0.3)",
       borderColor: "rgba(255, 56, 69, 1)",
       // borderRadius: 5,
@@ -138,20 +129,26 @@ export const Statistics = () => {
           </div>
         </div>
         <div className="flex flex-col items-start border border-primary bg-primary/5 px-6 py-8 shadow-[0px_0px_5px_2px] shadow-primary/20">
-          <div className="grid grid-cols-[1fr_400px] gap-16 w-full">
+          <div className="grid w-full grid-cols-[1fr_400px] gap-16">
             <div>
-              <Bar
-                options={options}
-                data={data}
-                className="h-[450px] w-full"
-              />
+              <Bar options={options} data={data} className="h-[450px] w-full" />
             </div>
-            <div className="h-[250px]">
-              <Doughnut
-                options={optionsDoughnut}
-                data={dataDoughnut}
-                // className="font-complementary"
-              />
+            <div className="flex flex-col items-center justify-start">
+              <div className="mb-10 h-[240px]">
+                <Doughnut options={optionsDoughnut} data={dataDoughnut} />
+              </div>
+              <div>
+                <div className="text-base font-medium uppercase">
+                  Most common threats:
+                </div>
+                <ul className="text-base">
+                  <li>1. Cross-site scripting (XSS) attacks</li>
+                  <li>2. Open redirection attacks</li>
+                  <li>3. Phishing attacks</li>
+                  <li>4. Session fixation attacks</li>
+                  <li>5. Cross-site request forgery (CSRF) attacks</li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>
