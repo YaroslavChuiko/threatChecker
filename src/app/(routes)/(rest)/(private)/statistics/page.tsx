@@ -1,5 +1,6 @@
 import { getServerAuthSession } from "~/server/auth";
 import Statistics from "./Statistics";
+import { api } from "~/trpc/server";
 
 export default async function StatisticsPage() {
   const session = await getServerAuthSession();
@@ -9,7 +10,7 @@ export default async function StatisticsPage() {
     // notFound();
   }
 
-  return (
-    <Statistics />
-  );
+  const statistics = await api.statistics.getLatestStatistics.query();
+
+  return <Statistics statistics={statistics} />;
 }

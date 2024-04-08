@@ -1,6 +1,5 @@
 "use client";
 
-import ProtocolIcon from "~/components/icons/ProtocolIcon";
 import {
   ArcElement,
   BarElement,
@@ -14,7 +13,9 @@ import {
 } from "chart.js";
 import { type ComponentProps } from "react";
 import { Bar, Doughnut } from "react-chartjs-2";
-import { format, sub } from "date-fns";
+import ProtocolIcon from "~/components/icons/ProtocolIcon";
+// import { format, sub } from "date-fns";
+import { type RouterOutputs } from "~/trpc/shared";
 
 ChartJS.register(
   CategoryScale,
@@ -26,7 +27,66 @@ ChartJS.register(
   ArcElement,
 );
 
-export const options: ComponentProps<typeof Bar>["options"] = {
+// const labels = [];
+// for (let i = 20; i > 0; i--) {
+//   labels.push(format(sub(new Date(), { days: i }), "dd/MM"));
+// }
+
+// const scannedSitesChartData: ChartData<"bar", number[], string> = {
+//   labels,
+//   datasets: [
+//     {
+//       label: "Sites scanned",
+//       data: labels.map(() => Math.floor(Math.random() * 20)),
+//       backgroundColor: "rgba(169, 215, 164, 0.3)",
+//       borderColor: "rgba(169, 215, 164, 1)",
+//       // borderRadius: 5,
+//       borderWidth: 2,
+//       hoverBackgroundColor: "rgba(169, 215, 164, 1)",
+//       hoverBorderColor: "rgba(169, 215, 164, 1)",
+//       hoverBorderWidth: 2,
+//     },
+//     {
+//       label: "High risk sites",
+//       data: labels.map(() => Math.floor(Math.random() * 20)),
+//       backgroundColor: "rgba(255, 56, 69, 0.3)",
+//       borderColor: "rgba(255, 56, 69, 1)",
+//       // borderRadius: 5,
+//       borderWidth: 2,
+//       hoverBackgroundColor: "rgba(255, 56, 69, 1)",
+//       hoverBorderColor: "rgba(255, 56, 69, 1)",
+//       hoverBorderWidth: 2,
+//     },
+//   ],
+// };
+
+// const riskLevelChartData: ChartData<"doughnut", number[], unknown> = {
+//   labels: ["Low", "Medium", "High"],
+//   datasets: [
+//     {
+//       label: "# detected by Vendors",
+//       data: [19, 5, 3],
+//       backgroundColor: [
+//         "rgba(29, 237, 131, 0.3)",
+//         "rgba(241, 181, 55, 0.3)",
+//         "rgba(255, 56, 69, 0.3)",
+//       ],
+//       borderColor: [
+//         "rgba(29, 237, 131, 1)",
+//         "rgba(241, 181, 55, 1)",
+//         "rgba(255, 56, 69, 1)",
+//       ],
+//       hoverBackgroundColor: [
+//         "rgba(29, 237, 131, 1)",
+//         "rgba(241, 181, 55, 1)",
+//         "rgba(255, 56, 69, 1)",
+//       ],
+//       borderWidth: 2,
+//     },
+//   ],
+// };
+
+const scannedSitesChartOptions: ComponentProps<typeof Bar>["options"] = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -40,40 +100,7 @@ export const options: ComponentProps<typeof Bar>["options"] = {
   },
 };
 
-const labels = [];
-for (let i = 20; i > 0; i--) {
-  labels.push(format(sub(new Date(), { days: i }), "dd/MM"));
-}
-
-export const data: ChartData<"bar", number[], string> = {
-  labels,
-  datasets: [
-    {
-      label: "Sites scanned",
-      data: labels.map(() => Math.floor(Math.random() * 20)),
-      backgroundColor: "rgba(169, 215, 164, 0.3)",
-      borderColor: "rgba(169, 215, 164, 1)",
-      // borderRadius: 5,
-      borderWidth: 2,
-      hoverBackgroundColor: "rgba(169, 215, 164, 1)",
-      hoverBorderColor: "rgba(169, 215, 164, 1)",
-      hoverBorderWidth: 2,
-    },
-    {
-      label: "High risk sites",
-      data: labels.map(() => Math.floor(Math.random() * 20)),
-      backgroundColor: "rgba(255, 56, 69, 0.3)",
-      borderColor: "rgba(255, 56, 69, 1)",
-      // borderRadius: 5,
-      borderWidth: 2,
-      hoverBackgroundColor: "rgba(255, 56, 69, 1)",
-      hoverBorderColor: "rgba(255, 56, 69, 1)",
-      hoverBorderWidth: 2,
-    },
-  ],
-};
-
-export const optionsDoughnut: ComponentProps<typeof Doughnut>["options"] = {
+const riskLevelChartOptions: ComponentProps<typeof Doughnut>["options"] = {
   responsive: true,
   maintainAspectRatio: false,
   plugins: {
@@ -87,33 +114,65 @@ export const optionsDoughnut: ComponentProps<typeof Doughnut>["options"] = {
   },
 };
 
-export const dataDoughnut: ChartData<"doughnut", number[], unknown> = {
-  labels: ["Low", "Medium", "High"],
-  datasets: [
-    {
-      label: "# detected by Vendors",
-      data: [19, 5, 3],
-      backgroundColor: [
-        "rgba(29, 237, 131, 0.3)",
-        "rgba(241, 181, 55, 0.3)",
-        "rgba(255, 56, 69, 0.3)",
-      ],
-      borderColor: [
-        "rgba(29, 237, 131, 1)",
-        "rgba(241, 181, 55, 1)",
-        "rgba(255, 56, 69, 1)",
-      ],
-      hoverBackgroundColor: [
-        "rgba(29, 237, 131, 1)",
-        "rgba(241, 181, 55, 1)",
-        "rgba(255, 56, 69, 1)",
-      ],
-      borderWidth: 2,
-    },
-  ],
+type Props = {
+  statistics: RouterOutputs["statistics"]["getLatestStatistics"];
 };
 
-export const Statistics = () => {
+export const Statistics = ({ statistics }: Props) => {
+  const scannedSitesChartData: ChartData<"bar", number[], string> = {
+    labels: statistics.scannedSitesChartData.map((item) => item.label),
+    datasets: [
+      {
+        label: "Sites scanned",
+        data: statistics.scannedSitesChartData.map((item) => item.scanned),
+        backgroundColor: "rgba(169, 215, 164, 0.3)",
+        borderColor: "rgba(169, 215, 164, 1)",
+        // borderRadius: 5,
+        borderWidth: 2,
+        hoverBackgroundColor: "rgba(169, 215, 164, 1)",
+        hoverBorderColor: "rgba(169, 215, 164, 1)",
+        hoverBorderWidth: 2,
+      },
+      {
+        label: "High risk sites",
+        data: statistics.scannedSitesChartData.map((item) => item.highRisk),
+        backgroundColor: "rgba(255, 56, 69, 0.3)",
+        borderColor: "rgba(255, 56, 69, 1)",
+        // borderRadius: 5,
+        borderWidth: 2,
+        hoverBackgroundColor: "rgba(255, 56, 69, 1)",
+        hoverBorderColor: "rgba(255, 56, 69, 1)",
+        hoverBorderWidth: 2,
+      },
+    ],
+  };
+
+  const riskLevelChartData: ChartData<"doughnut", number[], unknown> = {
+    labels: statistics.riskLevelChartData.map((item) => item.label),
+    datasets: [
+      {
+        label: "# detected by Vendors",
+        data: statistics.riskLevelChartData.map((item) => item.value),
+        backgroundColor: [
+          "rgba(29, 237, 131, 0.3)",
+          "rgba(241, 181, 55, 0.3)",
+          "rgba(255, 56, 69, 0.3)",
+        ],
+        borderColor: [
+          "rgba(29, 237, 131, 1)",
+          "rgba(241, 181, 55, 1)",
+          "rgba(255, 56, 69, 1)",
+        ],
+        hoverBackgroundColor: [
+          "rgba(29, 237, 131, 1)",
+          "rgba(241, 181, 55, 1)",
+          "rgba(255, 56, 69, 1)",
+        ],
+        borderWidth: 2,
+      },
+    ],
+  };
+
   return (
     <section className="flex grow content-start items-center justify-center">
       <div className="w-full max-w-7xl">
@@ -131,22 +190,34 @@ export const Statistics = () => {
         <div className="flex flex-col items-start border border-primary bg-primary/5 px-6 py-8 shadow-[0px_0px_5px_2px] shadow-primary/20">
           <div className="grid w-full grid-cols-[1fr_400px] gap-16">
             <div>
-              <Bar options={options} data={data} className="h-[450px] w-full" />
+              <Bar
+                options={scannedSitesChartOptions}
+                data={scannedSitesChartData}
+                className="h-[450px] w-full"
+              />
             </div>
             <div className="flex flex-col items-center justify-start">
               <div className="mb-10 h-[240px]">
-                <Doughnut options={optionsDoughnut} data={dataDoughnut} />
+                <Doughnut
+                  options={riskLevelChartOptions}
+                  data={riskLevelChartData}
+                />
               </div>
               <div>
                 <div className="text-base font-medium uppercase">
                   Most common threats:
                 </div>
                 <ul className="text-base">
-                  <li>1. Cross-site scripting (XSS) attacks</li>
+                  {statistics.mostCommonThreats.slice(0, 5).map((item, i) => (
+                    <li key={i}>
+                      {i + 1}. <span className="capitalize">{item}</span>
+                    </li>
+                  ))}
+                  {/* <li>1. Cross-site scripting (XSS) attacks</li>
                   <li>2. Open redirection attacks</li>
                   <li>3. Phishing attacks</li>
                   <li>4. Session fixation attacks</li>
-                  <li>5. Cross-site request forgery (CSRF) attacks</li>
+                  <li>5. Cross-site request forgery (CSRF) attacks</li> */}
                 </ul>
               </div>
             </div>
