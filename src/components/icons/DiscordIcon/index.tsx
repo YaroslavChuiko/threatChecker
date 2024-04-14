@@ -9,7 +9,7 @@ const DiscordIcon = ({ className, ...rest }: Props) => {
     <svg
       stroke="currentColor"
       fill="currentColor"
-      stroke-width="0"
+      strokeWidth="0"
       viewBox="0 0 640 512"
       height="200px"
       width="200px"
