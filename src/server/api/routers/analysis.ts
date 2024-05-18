@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { type ThreatSignature } from "@prisma/client";
+import { type Signature } from "@prisma/client";
 import { TRPCError } from "@trpc/server";
 import { getHTTPStatusCodeFromError } from "@trpc/server/http";
 import async from "async";
@@ -32,8 +32,8 @@ export const analysisRouter = createTRPCRouter({
         console.log("scriptsToScan.length", scriptsToScan.length);
 
         const threatSignatures = calculateRelativeWeights(
-          await ctx.db.threatSignature.findMany({
-            include: { threatDetails: true },
+          await ctx.db.signature.findMany({
+            include: { threats: true },
           }),
         );
 
@@ -52,10 +52,8 @@ export const analysisRouter = createTRPCRouter({
 
         const possibleAttacks = new Set<string>(
           result
-            .map(({ threatDetails }) =>
-              Array.isArray(threatDetails)
-                ? threatDetails.map((td) => td.name)
-                : [],
+            .map(({ threats }) =>
+              Array.isArray(threats) ? threats.map((td) => td.name) : [],
             )
             .flat(2),
         );
@@ -71,7 +69,7 @@ export const analysisRouter = createTRPCRouter({
           data: {
             url: input.url,
             securityRiskCoef,
-            threatSignatures: {
+            signatures: {
               connect: result.map((item) => ({ id: item.id })),
             },
           },
@@ -180,8 +178,8 @@ const downloadScripts = async (scriptURLList: string[]) => {
 };
 
 const calculateRelativeWeights = (
-  signatures: (ThreatSignature & {
-    threatDetails: {
+  signatures: (Signature & {
+    threats: {
       id: string;
       name: string;
     }[];
@@ -195,7 +193,7 @@ const calculateRelativeWeights = (
   }));
 };
 
-const scanScript = <T extends ThreatSignature>(
+const scanScript = <T extends Signature>(
   script: string,
   threatSignatures: T[],
 ) => {

@@ -5,31 +5,10 @@ generator client {
     provider = "prisma-client-js"
 }
 
-// datasource db {
-//     provider = "sqlite"
-//     // NOTE: When using mysql or sqlserver, uncomment the @db.Text annotations in model Account below
-//     // Further reading:
-//     // https://next-auth.js.org/adapters/prisma#create-the-prisma-schema
-//     // https://www.prisma.io/docs/reference/api-reference/prisma-schema-reference#string
-//     url      = env("DATABASE_URL")
-// }
-
 datasource db {
     provider  = "postgresql"
     url       = env("DATABASE_URL") // uses connection pooling
     directUrl = env("DATABASE_DIRECT_URL") // uses a direct connection
-}
-
-model Post {
-    id        Int      @id @default(autoincrement())
-    name      String
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-
-    createdBy   User   @relation(fields: [createdById], references: [id])
-    createdById String
-
-    @@index([name])
 }
 
 // Necessary for Next auth
@@ -39,13 +18,13 @@ model Account {
     type                     String
     provider                 String
     providerAccountId        String
-    refresh_token            String? // @db.Text
+    refresh_token            String?
     refresh_token_expires_in Int? // due to GitHub provider
-    access_token             String? // @db.Text
+    access_token             String?
     expires_at               Int?
     token_type               String?
     scope                    String?
-    id_token                 String? // @db.Text
+    id_token                 String?
     session_state            String?
     user                     User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -68,7 +47,6 @@ model User {
     image         String?
     accounts      Account[]
     sessions      Session[]
-    posts         Post[]
 }
 
 model VerificationToken {
@@ -79,21 +57,21 @@ model VerificationToken {
     @@unique([identifier, token])
 }
 
-model ThreatSignature {
+model Signature {
     id      String @id @default(cuid())
     name    String @db.VarChar(255)
     pattern String @db.VarChar(255)
     weight  Int    @default(1)
 
     scanHistory   ScanHistory[]
-    threatDetails ThreatDetails[]
+    threats Threat[]
 }
 
-model ThreatDetails {
+model Threat {
     id   String @id @default(cuid())
     name String @unique @db.VarChar(255)
 
-    threatSignatures ThreatSignature[]
+    threatSignatures Signature[]
 }
 
 model ScanHistory {
@@ -102,5 +80,5 @@ model ScanHistory {
     scanDate         DateTime @default(now())
     securityRiskCoef Float    @db.DoublePrecision
 
-    threatSignatures ThreatSignature[]
+    signatures Signature[]
 }

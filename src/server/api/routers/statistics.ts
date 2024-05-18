@@ -6,9 +6,9 @@ export const statisticsRouter = createTRPCRouter({
     const scanHistory = await ctx.db.scanHistory.findMany({
       where: { scanDate: { gte: sub(new Date(), { days: 20 }) } },
       include: {
-        threatSignatures: {
+        signatures: {
           include: {
-            threatDetails: true,
+            threats: true,
           },
         },
       },
@@ -47,8 +47,8 @@ export const statisticsRouter = createTRPCRouter({
 
     const mostCommonThreats = scanHistory.reduce(
       (acc, item) => {
-        item.threatSignatures.forEach((signature) => {
-          signature.threatDetails.forEach((threat) => {
+        item.signatures.forEach((signature) => {
+          signature.threats.forEach((threat) => {
             if (acc[threat.name]) {
               acc[threat.name]++;
               return;
