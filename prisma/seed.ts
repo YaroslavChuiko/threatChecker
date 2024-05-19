@@ -52,7 +52,7 @@ const Signatures = [
   {
     name: "setTimeout()", // setTimeout()
     pattern: "setTimeout\\(.*\\)",
-    weight: 2,
+    weight: 1,
     threats: {
       connect: [{ name: "denial of service (DoS)" }, { name: "clickjacking" }],
     },
@@ -60,7 +60,7 @@ const Signatures = [
   {
     name: "setInterval()", // setInterval()
     pattern: "setInterval\\(.*\\)",
-    weight: 2,
+    weight: 1,
     threats: {
       connect: [{ name: "denial of service (DoS)" }, { name: "clickjacking" }],
     },
@@ -92,7 +92,7 @@ const Signatures = [
   {
     name: "element.innerHTML", // element.innerHTML
     pattern: "\\.innerHTML\\s*=",
-    weight: 4,
+    weight: 1,
     threats: {
       connect: [{ name: "cross-site scripting (XSS)" }],
     },
