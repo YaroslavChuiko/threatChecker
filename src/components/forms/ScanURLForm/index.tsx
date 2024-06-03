@@ -68,7 +68,7 @@ export function ScanURLForm() {
       onSubmit={handleSubmit(onSubmit)}
       className="flex w-full flex-col items-center justify-center gap-5"
     >
-      <div className="flex w-full items-end gap-3">
+      <div className="flex w-full items-end gap-3 sm:flex-col sm:items-stretch sm:gap-1">
         <div className="flex flex-grow flex-col text-start">
           <label
             htmlFor="url"

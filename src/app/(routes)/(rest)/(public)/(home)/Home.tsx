@@ -4,7 +4,7 @@ import ProtocolIcon from "~/components/icons/ProtocolIcon";
 const Home = () => {
   return (
     <section className="flex grow content-start items-center justify-center">
-      <div className="max-w-2xl">
+      <div className="max-w-2xl md:max-w-xl">
         <div className="relative flex h-10 w-[calc(100%-1px)] select-none items-center justify-between bg-primary px-5 text-lg font-medium leading-none text-secondary/90 shadow-[0px_0px_10px_3px] shadow-primary/20 before:absolute before:inset-x-4 before:bottom-0 before:z-10 before:block before:h-[1px] before:bg-secondary/90 before:content-['']">
           <span aria-hidden="true">CYBERSPACE SCANNING CONSOLE</span>
           <div
@@ -16,7 +16,7 @@ const Home = () => {
             <span>LOAD ADDRESS: 0000020010000</span>
           </div>
         </div>
-        <div className="flex flex-col items-start border border-primary bg-primary/5 px-6 py-8 shadow-[0px_0px_5px_2px] shadow-primary/20">
+        <div className="flex flex-col items-start border border-primary bg-primary/5 px-6 py-8 shadow-[0px_0px_5px_2px] shadow-primary/20 md:px-4 md:py-6">
           <h2 className="text-shadow-primary-lg mb-5 text-xl font-medium uppercase leading-none">
             website malware and security checker
           </h2>

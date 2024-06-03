@@ -5,11 +5,27 @@ export default {
   content: ["./src/**/*.tsx"],
   theme: {
     extend: {
+      screens: {
+        "2xl": { max: "1535px" },
+        // => @media (max-width: 1535px) { ... }
+
+        xl: { max: "1279px" },
+        // => @media (max-width: 1279px) { ... }
+
+        lg: { max: "1023px" },
+        // => @media (max-width: 1023px) { ... }
+
+        md: { max: "767px" },
+        // => @media (max-width: 767px) { ... }
+
+        sm: { max: "639px" },
+        // => @media (max-width: 639px) { ... }
+      },
       colors: {
         primary: "#a9d7a4", //b0d9bf ff3845 a9d7a4 cce454 1cd77c
         secondary: "#0E0E17",
-        success: '#1ded83',
-        warning: '#f0b537',
+        success: "#1ded83",
+        warning: "#f0b537",
         error: "#ff3845",
       },
       fontFamily: {
@@ -29,8 +45,6 @@ export default {
       backgroundImage: {
         "gradient-scanlines":
           "linear-gradient(hsla(0,6%,7%,0) 50%,rgba(0,0,0,.25) 0),linear-gradient(90deg,rgba(255,0,0,.06),rgba(0,255,0,.02),rgba(0,0,255,.06));",
-        // "gradient-scanlines":
-        //   "linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));",
       },
       backgroundSize: {
         "size-scanlines": "100% 3px, 3px 100%;",
@@ -40,7 +54,7 @@ export default {
           from: { transform: "translate3d(0, 0, 0)" },
           to: { transform: "translate3d(0, -100%, 0)" },
         },
-        'button-loading': {
+        "button-loading": {
           from: { backgroundPosition: "-300px 0" },
           to: { backgroundPosition: "300px 0" },
         },
