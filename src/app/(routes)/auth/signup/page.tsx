@@ -1,45 +1,18 @@
 "use client";
 
-import { type BuiltInProviderType } from "next-auth/providers/index";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
-import {
-  useEffect,
-  type MouseEventHandler,
-  type ReactNode,
-  type MouseEvent,
-} from "react";
+import { useEffect, type MouseEvent, type MouseEventHandler } from "react";
 import Button from "~/components/buttons/Button";
-import DiscordIcon from "~/components/icons/DiscordIcon";
-import EnvelopeIcon from "~/components/icons/EnvelopeIcon";
-import GithubIcon from "~/components/icons/GithubIcon";
-import GoogleIcon from "~/components/icons/GoogleIcon";
+import { AUTH_PROVIDERS } from "~/constants/auth-providers";
 import { ROUTES } from "~/routes";
-
-type ProviderButton = {
-  id: BuiltInProviderType;
-  icon: ReactNode;
-};
-
-const providerButtons: ProviderButton[] = [
-  {
-    id: "google",
-    icon: <GoogleIcon className="mr-3 h-4 w-4 drop-shadow-primary-lg" />,
-  },
-  {
-    id: "github",
-    icon: <GithubIcon className="mr-3 h-4 w-4 drop-shadow-primary-lg" />,
-  },
-  {
-    id: "discord",
-    icon: <DiscordIcon className="mr-3 h-4 w-4 drop-shadow-primary-lg" />,
-  },
-];
+import { getProviderIcon } from "~/services/provider-icon-service";
 
 export default function SignUpPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const EmailProviderIcon = getProviderIcon("email");
 
   useEffect(() => {
     router.prefetch(ROUTES.AUTH.SIGNUP_EMAIL);
@@ -65,20 +38,23 @@ export default function SignUpPage() {
         Create an account
       </div>
       <div className="mb-10 flex flex-col gap-2 text-start">
-        {providerButtons.map((provider) => (
-          <Button
-            key={provider.id}
-            variant="secondary"
-            onClick={handleSignInProviderClick(provider.id)}
-          >
-            {provider.icon}
-            Sign up with{" "}
-            {provider.id.charAt(0).toUpperCase() + provider.id.slice(1)}
-          </Button>
-        ))}
+        {AUTH_PROVIDERS.map((provider) => {
+          const Icon = getProviderIcon(provider);
+
+          return (
+            <Button
+              key={provider}
+              variant="secondary"
+              onClick={handleSignInProviderClick(provider)}
+            >
+              <Icon className="mr-3 h-4 w-4 drop-shadow-primary-lg" />
+              Sign up with {provider}
+            </Button>
+          );
+        })}
         <Button variant="secondary" onClick={handleSignUpEmailClick}>
-          <EnvelopeIcon className="mr-3 h-4 w-4 drop-shadow-primary-lg" /> Sign
-          up with Email
+          <EmailProviderIcon className="mr-3 h-4 w-4 drop-shadow-primary-lg" />{" "}
+          Sign up with Email
         </Button>
       </div>
 
