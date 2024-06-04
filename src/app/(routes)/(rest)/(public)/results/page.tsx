@@ -6,12 +6,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "~/components/Accordion";
+import SiteDetails from "~/components/SiteDetails";
 import ChevronLeftIcon from "~/components/icons/ChevronLeftIcon";
 import { ROUTES } from "~/routes";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 import SecurityRiskStatusSection from "./SecurityRiskStatusSection";
-import { formatBytes } from "~/utils/formatBytes";
 
 type Props = {
   searchParams: {
@@ -27,8 +27,12 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
   const session = await getServerAuthSession();
   const result = await api.analysis.scanUrl.mutate({ url: query });
 
-  if (result.status === 'error') {
-    return <div>{result.error.message}</div>;
+  if (result.status === "error") {
+    return (
+      <div className="flex grow content-start items-center justify-center">
+        {result.error.message}
+      </div>
+    );
   }
 
   const {
@@ -40,9 +44,26 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
     siteDetails,
   } = result.data;
 
-  // await new Promise((resolve) => {
-  //   setTimeout(resolve, 5000);
-  // });
+  const blacklistTotalCount = Object.values(blacklistsAnalysis.stats).reduce(
+    (acc, curr) => acc + curr,
+    0,
+  );
+
+  const vendorList = blacklistsAnalysis.results.length
+    ? blacklistsAnalysis.results.map(([vendorName, results]) => (
+        <p key={vendorName}>
+          <span className="font-medium">{vendorName}:</span> {results.result}
+        </p>
+      ))
+    : "No vendors found";
+
+  const linkList = foundLinks.length
+    ? foundLinks.map((link, i) => <p key={i}>{link}</p>)
+    : "No links found";
+
+  const scriptLinkList = referencedScriptLinks.length
+    ? referencedScriptLinks.map((link, i) => <p key={i}>{link}</p>)
+    : "No JavaScript included";
 
   return (
     <section className="flex grow content-start items-center justify-center">
@@ -93,11 +114,7 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
                     <span className="text-base font-medium uppercase">
                       Blacklists:{" "}
                     </span>
-                    {blacklistsAnalysis.stats.malicious}/
-                    {Object.values(blacklistsAnalysis.stats).reduce(
-                      (acc, curr) => acc + curr,
-                      0,
-                    )}
+                    {blacklistsAnalysis.stats.malicious}/{blacklistTotalCount}
                   </div>
                   <div>
                     {blacklistsAnalysis.stats.malicious || "No"} security
@@ -108,82 +125,26 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
                   <AccordionItem value="item-1">
                     <AccordionTrigger>details</AccordionTrigger>
                     <AccordionContent className="max-h-[250px] overflow-y-auto">
-                      {blacklistsAnalysis.results.length
-                        ? blacklistsAnalysis.results.map(
-                            ([vendorName, results]) => (
-                              <p key={vendorName}>
-                                <span className="font-medium">
-                                  {vendorName}:
-                                </span>{" "}
-                                {results.result}
-                              </p>
-                            ),
-                          )
-                        : "No vendors found"}
+                      {vendorList}
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
 
                 <div className="my-5 mr-4 border-b-[1px] border-primary/30" />
 
-                <div className="text-shadow-primary-lg mb-7 space-y-3 pl-4 pr-8 pt-2">
-                  <div className="text-base">
-                    <span className="text-base font-medium uppercase">
-                      Title:{" "}
-                    </span>
-                    {siteDetails.title || "N/A"}
-                  </div>
-                  <div className="text-base">
-                    <span className="text-base font-medium uppercase">
-                      content type:{" "}
-                    </span>
-                    {siteDetails.contentType ?? "N/A"}
-                  </div>
-                  <div className="text-base">
-                    <span className="text-base font-medium uppercase">
-                      Status:{" "}
-                    </span>
-                    200
-                  </div>
-                  <div className="text-base">
-                    <span className="text-base font-medium uppercase">
-                      connection:{" "}
-                    </span>
-                    {siteDetails.connection ?? "N/A"}
-                  </div>
-                  <div className=" text-base">
-                    <span className="text-base font-medium uppercase">
-                      Server:{" "}
-                    </span>
-                    {siteDetails.server ?? "N/A"}
-                  </div>
-                  <div className=" text-base">
-                    <span className="text-base font-medium uppercase">
-                      Body Length:{" "}
-                    </span>
-                    {siteDetails.contentLength
-                      ? formatBytes(siteDetails.contentLength)
-                      : "N/A"}
-                  </div>
-                </div>
+                <SiteDetails siteDetails={siteDetails} />
 
                 <Accordion className="pr-4" type="single" collapsible>
                   <AccordionItem value="item-1">
                     <AccordionTrigger>Links found</AccordionTrigger>
                     <AccordionContent className="max-h-[250px] overflow-y-auto">
-                      {foundLinks.length
-                        ? foundLinks.map((link, i) => <p key={i}>{link}</p>)
-                        : "No links found"}
+                      {linkList}
                     </AccordionContent>
                   </AccordionItem>
                   <AccordionItem value="item-2">
                     <AccordionTrigger>JavaScript included</AccordionTrigger>
                     <AccordionContent className="max-h-[250px] overflow-y-auto">
-                      {referencedScriptLinks.length
-                        ? referencedScriptLinks.map((link, i) => (
-                            <p key={i}>{link}</p>
-                          ))
-                        : "No JavaScript included"}
+                      {scriptLinkList}
                     </AccordionContent>
                   </AccordionItem>
                 </Accordion>
