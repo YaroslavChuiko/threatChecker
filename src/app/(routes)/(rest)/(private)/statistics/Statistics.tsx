@@ -14,7 +14,6 @@ import {
 import { type ComponentProps } from "react";
 import { Bar, Doughnut } from "react-chartjs-2";
 import ProtocolIcon from "~/components/icons/ProtocolIcon";
-// import { format, sub } from "date-fns";
 import { type RouterOutputs } from "~/trpc/shared";
 
 ChartJS.register(
@@ -26,65 +25,6 @@ ChartJS.register(
   Legend,
   ArcElement,
 );
-
-// const labels = [];
-// for (let i = 20; i > 0; i--) {
-//   labels.push(format(sub(new Date(), { days: i }), "dd/MM"));
-// }
-
-// const scannedSitesChartData: ChartData<"bar", number[], string> = {
-//   labels,
-//   datasets: [
-//     {
-//       label: "Sites scanned",
-//       data: labels.map(() => Math.floor(Math.random() * 20)),
-//       backgroundColor: "rgba(169, 215, 164, 0.3)",
-//       borderColor: "rgba(169, 215, 164, 1)",
-//       // borderRadius: 5,
-//       borderWidth: 2,
-//       hoverBackgroundColor: "rgba(169, 215, 164, 1)",
-//       hoverBorderColor: "rgba(169, 215, 164, 1)",
-//       hoverBorderWidth: 2,
-//     },
-//     {
-//       label: "High risk sites",
-//       data: labels.map(() => Math.floor(Math.random() * 20)),
-//       backgroundColor: "rgba(255, 56, 69, 0.3)",
-//       borderColor: "rgba(255, 56, 69, 1)",
-//       // borderRadius: 5,
-//       borderWidth: 2,
-//       hoverBackgroundColor: "rgba(255, 56, 69, 1)",
-//       hoverBorderColor: "rgba(255, 56, 69, 1)",
-//       hoverBorderWidth: 2,
-//     },
-//   ],
-// };
-
-// const riskLevelChartData: ChartData<"doughnut", number[], unknown> = {
-//   labels: ["Low", "Medium", "High"],
-//   datasets: [
-//     {
-//       label: "# detected by Vendors",
-//       data: [19, 5, 3],
-//       backgroundColor: [
-//         "rgba(29, 237, 131, 0.3)",
-//         "rgba(241, 181, 55, 0.3)",
-//         "rgba(255, 56, 69, 0.3)",
-//       ],
-//       borderColor: [
-//         "rgba(29, 237, 131, 1)",
-//         "rgba(241, 181, 55, 1)",
-//         "rgba(255, 56, 69, 1)",
-//       ],
-//       hoverBackgroundColor: [
-//         "rgba(29, 237, 131, 1)",
-//         "rgba(241, 181, 55, 1)",
-//         "rgba(255, 56, 69, 1)",
-//       ],
-//       borderWidth: 2,
-//     },
-//   ],
-// };
 
 const scannedSitesChartOptions: ComponentProps<typeof Bar>["options"] = {
   responsive: true,
@@ -213,11 +153,6 @@ export const Statistics = ({ statistics }: Props) => {
                       {i + 1}. <span className="capitalize">{item}</span>
                     </li>
                   ))}
-                  {/* <li>1. Cross-site scripting (XSS) attacks</li>
-                  <li>2. Open redirection attacks</li>
-                  <li>3. Phishing attacks</li>
-                  <li>4. Session fixation attacks</li>
-                  <li>5. Cross-site request forgery (CSRF) attacks</li> */}
                 </ul>
               </div>
             </div>
