@@ -1,4 +1,4 @@
-export const formatBytes = (bytes: number, decimals = 2) => {
+export const formatFileSize = (bytes: number, decimals = 2) => {
   if (!+bytes) return "0 Bytes";
 
   const k = 1024;

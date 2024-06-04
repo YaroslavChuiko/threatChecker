@@ -1,6 +1,6 @@
 import Header from "~/components/Header";
 import { getServerAuthSession } from "~/server/auth";
-import { generateRandomRows } from "~/utils/generateRandomRows";
+import { generateRandomRows } from "~/utils/generate-random-rows";
 
 const leftDecorRows = generateRandomRows(200, 3);
 const rightDecorRows = generateRandomRows(200, 3);

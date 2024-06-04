@@ -1,4 +1,4 @@
-export const hideEmail = (email: string) => {
+export const concealEmail = (email: string) => {
   const [name, domain] = email.split("@");
 
   if (!name || !domain) {

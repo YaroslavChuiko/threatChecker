@@ -1,5 +1,5 @@
 import React from "react";
-import { formatBytes } from "~/utils/formatBytes";
+import { formatFileSize } from "~/utils/format-file-size";
 
 type Props = {
   siteDetails: {
@@ -38,7 +38,7 @@ const SiteDetails = ({ siteDetails }: Props) => {
       <div className=" text-base">
         <span className="text-base font-medium uppercase">Body Length: </span>
         {siteDetails.contentLength
-          ? formatBytes(siteDetails.contentLength)
+          ? formatFileSize(siteDetails.contentLength)
           : "N/A"}
       </div>
     </div>

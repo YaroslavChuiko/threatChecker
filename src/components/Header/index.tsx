@@ -9,9 +9,9 @@ import { useEffect, useState } from "react";
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
 import { getServerAuthSession } from "~/server/auth";
 import { cn } from "~/utils/cn";
-import { hideEmail } from "~/utils/hideEmail";
 import Logo from "../Logo";
 import AttentionAltIcon from "../icons/AttentionAltIcon";
+import { concealEmail } from "~/utils/conceal-email";
 
 const links = [
   { href: ROUTES.PUBLIC.HOME, label: "Scanning console" },
@@ -65,7 +65,7 @@ const Header = ({ session }: Props) => {
     <div className="flex items-center gap-10">
       {session?.user?.email ? (
         <div className="text-shadow-primary-md text-xs md:hidden">
-          {hideEmail(session.user.email)}
+          {concealEmail(session.user.email)}
         </div>
       ) : null}
       <button
@@ -93,7 +93,6 @@ const Header = ({ session }: Props) => {
           <li key={href}>
             <Link
               href={href}
-              // className="text-shadow-primary-lg text-lg font-medium uppercase text-primary/80 transition hover:text-primary"
               className={`text-shadow-primary-lg ${cn(
                 clsx(
                   "border-b-[3px] border-primary/30 px-3 py-1  text-lg font-medium uppercase  text-primary/70 transition hover:border-primary/90 hover:text-primary/90",

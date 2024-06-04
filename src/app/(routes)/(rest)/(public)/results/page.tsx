@@ -11,7 +11,7 @@ import ChevronLeftIcon from "~/components/icons/ChevronLeftIcon";
 import { ROUTES } from "~/routes";
 import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
-import SecurityRiskStatusSection from "./SecurityRiskStatusSection";
+import SecurityThreatStatusSection from "~/components/SecurityThreatStatusSection";
 
 type Props = {
   searchParams: {
@@ -95,7 +95,7 @@ export default async function ResultsPage({ searchParams: { query } }: Props) {
 
             <div className="w-full pl-6 pr-2">
               <div className="max-h-[550px] w-full overflow-y-auto overflow-x-hidden">
-                <SecurityRiskStatusSection
+                <SecurityThreatStatusSection
                   securityRiskCoef={securityRiskCoef}
                   possibleAttacks={possibleAttacks}
                   session={session}

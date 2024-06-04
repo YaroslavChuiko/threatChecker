@@ -8,7 +8,7 @@ import { z } from "zod";
 import Button from "~/components/buttons/Button";
 import AttentionIcon from "~/components/icons/AttentionIcon";
 import { ROUTES } from "~/routes";
-import { updateSearchParams } from "~/utils/updateSearchParams";
+import { updateSearchParams } from "~/utils/update-search-params";
 
 const errorMessages =
   "Please enter a valid website URL. (e.g. https://www.example.com)";

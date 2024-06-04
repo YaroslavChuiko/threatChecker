@@ -6,20 +6,11 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import AttentionIcon from "~/components/icons/AttentionIcon";
 import { ROUTES } from "~/routes";
-
-type SecurityRiskStatusLabel =
-  | "minimal"
-  | "low"
-  | "medium"
-  | "high"
-  | "critical";
-
-type SecurityRiskStatusColor = "success" | "warning" | "error";
-
-type SecurityRiskStatus = {
-  label: SecurityRiskStatusLabel;
-  color: SecurityRiskStatusColor;
-};
+import {
+  type SecurityRiskStatusLabel,
+  getSecurityRiskStatus,
+  type SecurityRiskStatusColor,
+} from "~/services/security-risc-level-service";
 
 const securityRiskLabels: SecurityRiskStatusLabel[] = [
   "minimal",
@@ -29,59 +20,41 @@ const securityRiskLabels: SecurityRiskStatusLabel[] = [
   "critical",
 ];
 
-const calculateSecurityRiskStatus = (
-  securityRiskCoef: number,
-): SecurityRiskStatus => {
-  if (securityRiskCoef < 0.2) {
-    return { label: "minimal", color: "success" };
-  }
-
-  if (securityRiskCoef < 0.4) {
-    return { label: "low", color: "warning" };
-  }
-
-  if (securityRiskCoef < 0.7) {
-    return { label: "medium", color: "warning" };
-  }
-
-  if (securityRiskCoef < 0.8) {
-    return { label: "high", color: "error" };
-  }
-
-  return { label: "critical", color: "error" };
+type StylesMappings = {
+  [key in SecurityRiskStatusColor]: string;
 };
 
-const textColorMappings = {
+const textColorMappings: StylesMappings = {
   success: "text-success",
   warning: "text-warning",
   error: "text-error",
 };
 
-const bgColorMappings = {
+const bgColorMappings: StylesMappings = {
   success: "bg-success",
   warning: "bg-warning",
   error: "bg-error",
 };
 
-const bgColorOpacityMappings = {
+const bgColorOpacityMappings: StylesMappings = {
   success: "bg-success/20",
   warning: "bg-warning/20",
   error: "bg-error/20",
 };
 
-const dropShadowLgMappings = {
+const dropShadowLgMappings: StylesMappings = {
   success: "drop-shadow-success-lg",
   warning: "drop-shadow-warning-lg",
   error: "drop-shadow-error-lg",
 };
 
-const textShadowLgMappings = {
+const textShadowLgMappings: StylesMappings = {
   success: "text-shadow-success-lg",
   warning: "text-shadow-warning-lg",
   error: "text-shadow-error-lg",
 };
 
-const textShadowMdMappings = {
+const textShadowMdMappings: StylesMappings = {
   success: "text-shadow-success-md",
   warning: "text-shadow-warning-md",
   error: "text-shadow-error-md",
@@ -93,14 +66,14 @@ type Props = {
   session: Session | null;
 };
 
-const SecurityRiskStatusSection = ({
+const SecurityThreatStatusSection = ({
   securityRiskCoef,
   possibleAttacks,
   session,
 }: Props) => {
   const pathname = usePathname();
   const searchParams = useSearchParams();
-  const securityRiskStatus = calculateSecurityRiskStatus(securityRiskCoef);
+  const securityRiskStatus = getSecurityRiskStatus(securityRiskCoef);
 
   const signinRedirectUrl = `${
     ROUTES.AUTH.SIGNIN
@@ -198,4 +171,4 @@ const SecurityRiskStatusSection = ({
   );
 };
 
-export default SecurityRiskStatusSection;
+export default SecurityThreatStatusSection;
